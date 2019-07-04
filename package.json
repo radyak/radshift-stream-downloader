@@ -1,5 +1,5 @@
 {
-  "name": "youtube-dl",
+  "name": "radshift-stream-downloader",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "youtube-dl": "^2.0.0",
     "youtube-mp3-downloader": "^0.5.3"
   }
 }

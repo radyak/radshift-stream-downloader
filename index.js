@@ -1,4 +1,19 @@
-var downloadMp3 = require("./download-mp3");
-var downloadVideo = require("./download-video");
+const bodyParser = require('body-parser')
+const express = require('express')
+const app = express()
 
-downloadVideo(`vbttZVTSJRU`);
+require('express-ws')(app)
+
+app.use(
+  bodyParser.urlencoded({
+    extended: false
+  })
+)
+app.use(bodyParser.json())
+
+app.use('/api/audio', require('./src/routes/audio'))
+app.use('/api/video', require('./src/routes/video'))
+
+const port = process.env.PORT || 3009
+app.listen(port)
+console.log(`Lisitening on port ${port}`)

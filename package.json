@@ -5,12 +5,18 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "watch": "PORT=3009 nodemon ./index.js localhost"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.17.1",
+    "express-ws": "^4.0.0",
     "youtube-dl": "^2.0.0",
     "youtube-mp3-downloader": "^0.5.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
   }
 }

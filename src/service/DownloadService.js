@@ -3,9 +3,49 @@ const crypto = require('crypto')
 const youtubedl = require('youtube-dl')
 const ffmpeg = require('fluent-ffmpeg')
 const path = require('path')
+const EventEmitter = require('events')
+ 
 
-
+const eventEmitter = new EventEmitter()
 const rootPath = process.cwd()
+
+
+
+class DownloadEvents {
+    constructor(downloadId, downloadMetadata) {
+
+        this.onSubscribe = (handler) => {
+            handler({
+                ...downloadMetadata,
+                type: `subscribe`
+            })
+        }
+
+        this.onProgress = (handler) => {
+            eventEmitter.on(`progress-${downloadId}`, (event) => {
+                handler(event)
+            })
+        }
+
+        this.onError = (handler) => {
+            eventEmitter.on(`error-${downloadId}`, (event) => {
+                handler({
+                    ...event,
+                    message: `An error occurred while downloading video ${downloadId}`
+                })
+            })
+        }
+
+        this.onFinished = (handler) => {
+            eventEmitter.on(`finished-${downloadId}`, (event) => {
+                handler({
+                    ...event,
+                    message: `Finished downloading video ${downloadId}`
+                })
+            })
+        }
+    }
+}
 
 
 module.exports = {
@@ -27,11 +67,46 @@ module.exports = {
         var now = new Date().toISOString()
         var id = crypto.createHash('md5').update(now).digest('hex')
         var tempFilename = `download-${now}.${format}`
-        var tempFile = `./output/${tempFilename}`
+        var tempFile = path.join(outputPath, tempFilename)
         var finalFile
+        var metadata
 
         download.on('info', function(info) {
-            console.log('Download started', info)
+            metadata = {
+                download: id,
+                start: new Date().toISOString(),
+
+                // youtube-dl metadata
+                extractor_key: info.extractor_key,
+                extractor: info.extractor,
+                webpage_url: info.webpage_url,
+                average_rating: info.average_rating,
+                view_count: info.view_count,
+                channel_url: info.channel_url,
+                
+                // file metadata
+                width: info.width,
+                duration: info.duration,
+                height: info.height,
+                resolution: info.resolution,
+                format_id: info.format_id,
+                size: info.size,
+                
+                // content metadata
+                artist: info.artist,
+                alt_title: info.alt_title,
+                creator: info.creator,
+                fulltitle: info.fulltitle,
+                album: info.album,
+                description: info.description,
+                track: info.track,
+                thumbnail: info.thumbnail,
+            }
+
+            eventEmitter.emit(`start`, {
+                ...metadata,
+                type: 'started'
+            })
 
             finalFile = `./output/${info.fulltitle}.${format}`
             size = info.size
@@ -42,37 +117,53 @@ module.exports = {
 
             if (size) {
               var percent = position / size
-              console.log(percent)
+              var event = {
+                  type: 'progress',
+                  progress: percent
+              }
+              eventEmitter.emit(`progress-${id}`, event)
+              eventEmitter.emit(`progress`, event)
             }
+
         })
 
-        download.on('complete', function complete(info) {
-            console.log('filename: ' + info._filename + ' already downloaded.');
-        });
-
-        download.on('end', function() {
-            console.log('finished downloading!');
-        });
-
         download.on('error', function error(err) {
-            console.log('error 2:', err);
+            var event = {
+                type: 'error',
+                error: err
+            }
+            eventEmitter.emit(`error-${id}`, event)
+            eventEmitter.emit(`error`, event)
         });
         
-
-        // video.pipe(fs.createWriteStream(targetFile));
         
         ffmpeg({source: download})
-            .setFfmpegPath('/home/fvo/private/dev/radshift/radshift-stream-downloader/ffmpeg-4.1.3-i686-static/ffmpeg')
+            .setFfmpegPath(ffmpegPath)
             .saveToFile(tempFile, (stdout, stderr) => {
                 console.log(stdout)
                 console.error(stderr)
             })
             .on('end', function() {
                 fs.rename(tempFile, finalFile, (err) => {
+                    if(err) {
+                        
+                        return
+                    }
                     console.log(`File saved as ${finalFile}`)
+
+                    var event = {
+                        type: 'finished',
+                        // TODO: Remove later!
+                        filename: finalFile
+                    }
+                    eventEmitter.emit(`finished-${id}`, event)
+                    eventEmitter.emit(`finished`, event)
                 })
                 console.log('Processing finished !');
             })
+
+
+        return new DownloadEvents(id, metadata)
     
     }
 

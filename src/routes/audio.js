@@ -26,16 +26,12 @@ router.get('/info', (req, res) => {
 //     res.status(204).send()
 // })
 
+
 // Trigger and subscribe download via Websocket
+// Example: ws://localhost:3009/api/audio/download?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DKpOtuoHL45Y
 router.ws('/download', function (ws, req) {
 
-    console.log('hier')
-
-    ws.send(JSON.stringify({
-        test: "works"
-    }))
-
-    const url = decodeURIComponent(req.query.url)
+    const url = req.query.url
 
     if (!url) {
         console.log(`Parameter 'url' is missing`)
@@ -46,22 +42,22 @@ router.ws('/download', function (ws, req) {
         ws.close()
         return
     }
-    console.log(`Parameter 'url' is ${url} (was ${req.query.url})`)
 
     const forwardToWebsocket = (data) => {
         ws.send(JSON.stringify(data))
     }
 
-    var events = DownloadService.download(url, {
+    DownloadService.download(url, {
         format: 'mp3'
+    }).then(events => {
+        events.onProgress(forwardToWebsocket)
+        events.onError(forwardToWebsocket)
+        events.onFinished((data) => {
+            forwardToWebsocket(data)
+            ws.close()
+        })
     })
 
-    events.onProgress(forwardToWebsocket)
-    events.onError(forwardToWebsocket)
-    events.onFinished((data) => {
-        forwardToWebsocket(data)
-        ws.close()
-    })
 
   })
 

@@ -1,16 +1,10 @@
-const fs = require('fs')
 const crypto = require('crypto')
 const youtubedl = require('youtube-dl')
-const ffmpeg = require('fluent-ffmpeg')
-const path = require('path')
 const EventEmitter = require('events')
- 
+const FileStorageService = require('./FileStorageService')
+
 
 const eventEmitter = new EventEmitter()
-const rootPath = process.cwd()
-
-const outputPath = process.env.FFMPEG_PATH || path.join(rootPath, 'output')
-const ffmpegPath = process.env.FFMPEG_PATH || path.join(rootPath, 'ffmpeg-4.1.3-i686-static', 'ffmpeg')
 
 
 class DownloadEvents {
@@ -18,8 +12,7 @@ class DownloadEvents {
 
         this.onSubscribe = (handler) => {
             handler({
-                ...downloadMetadata,
-                type: `subscribe`
+                ...downloadMetadata
             })
         }
 
@@ -50,55 +43,16 @@ class DownloadEvents {
 }
 
 
-module.exports = {
+const getInfo = (url) => {
 
-    // TODO: Move this and all fs related stuff to separate service...
-
-    getFiles: () => {
-        const files = fs.readdirSync(outputPath, 'utf8');
-        const result = [];
-        for (let file of files) {
-            const extension = path.extname(file)
-            const fileStats = fs.statSync(path.join(outputPath, file))
-            result.push({
-                name: file,
-                extension: extension.replace(/\./i, ''),
-                sizeInBytes: fileStats.size,
-                createdAt: fileStats.birthtime,
-            })
-        }
-        return result
-    },
-
-    getFilePath: (filename) => {
-        const filepath = path.join(outputPath, filename)
-        return fs.existsSync(filepath) ? filepath : null
-    },
-
-    download: (url, options = {}) => {
-
-        var format = options.format || 'mp3'
-        
-        if (!fs.existsSync(outputPath)){
-            fs.mkdirSync(outputPath);
-        }
-
-        var download = youtubedl(url, [], { cwd: __dirname })
-        
-        var size = 0
-        var position = 0
-        var now = new Date().toISOString()
-        var id = crypto.createHash('md5').update(now).digest('hex')
-        var tempFilename = `download-${now}.${format}`
-        var tempFile = path.join(outputPath, tempFilename)
-        var finalFile
-        var metadata
-
-        download.on('info', function(info) {
-            metadata = {
-                download: id,
-                start: new Date().toISOString(),
-
+    return new Promise((resolve, reject) => {
+        youtubedl.getInfo(url, [], function(err, info) {
+            if (err) {
+                reject(err)
+                return
+            }
+            
+            var metadata = {
                 // youtube-dl metadata
                 extractor_key: info.extractor_key,
                 extractor: info.extractor,
@@ -113,7 +67,7 @@ module.exports = {
                 height: info.height,
                 resolution: info.resolution,
                 format_id: info.format_id,
-                size: info.size,
+                size: info.filesize,
                 
                 // content metadata
                 artist: info.artist,
@@ -126,69 +80,83 @@ module.exports = {
                 thumbnail: info.thumbnail,
             }
 
-            eventEmitter.emit(`start`, {
-                ...metadata,
-                type: 'started'
-            })
+            console.log(metadata)
 
-            finalFile = `./output/${info.fulltitle}.${format}`
-            size = info.size
-        })
-    
-        download.on('data', function data(chunk) {
-            position += chunk.length
-
-            if (size) {
-              var percent = position / size
-              var event = {
-                  type: 'progress',
-                  progress: percent
-              }
-              eventEmitter.emit(`progress-${id}`, event)
-              eventEmitter.emit(`progress`, event)
-            }
-
-        })
-
-        download.on('error', function error(err) {
-            var event = {
-                type: 'error',
-                error: err
-            }
-            eventEmitter.emit(`error-${id}`, event)
-            eventEmitter.emit(`error`, event)
+            resolve(metadata)
         });
-        
-        
-        ffmpeg({source: download})
-            .setFfmpegPath(ffmpegPath)
-            .saveToFile(tempFile, (stdout, stderr) => {
-                console.log(stdout)
-                console.error(stderr)
-            })
-            .on('end', function() {
-                fs.rename(tempFile, finalFile, (err) => {
-                    if(err) {
-                        
-                        return
-                    }
-                    console.log(`File saved as ${finalFile}`)
+    })
 
-                    var event = {
-                        type: 'finished',
-                        // TODO: Remove later!
-                        filename: finalFile
-                    }
-                    eventEmitter.emit(`finished-${id}`, event)
-                    eventEmitter.emit(`finished`, event)
-                })
-                console.log('Processing finished !');
-            })
+}
 
 
-        return new DownloadEvents(id, metadata)
+const downloadWithMetaData = (url, metadata, options = {}) => {
+
+    console.log(`Downloading from ${url}`)
+
+    var download = youtubedl(url, [], { cwd: __dirname })
     
+    var format = options.format || 'mp3'
+    var size = metadata.size
+    var position = 0
+    var now = new Date().toISOString()
+    var id = crypto.createHash('md5').update(now).digest('hex')
+    var targetFile = `${metadata.fulltitle}.${format}`
+
+    metadata = {
+        ...metadata,
+        download: id,
+        start: new Date().toISOString()
     }
 
+    eventEmitter.emit(`start`, {
+        ...metadata
+    })
+
+    download.on('data', function data(chunk) {
+        position += chunk.length
+
+        if (size) {
+          var percentage = position / size
+          var event = {
+              progress: percentage
+          }
+          eventEmitter.emit(`progress-${id}`, event)
+          eventEmitter.emit(`progress`, event)
+        }
+
+    })
+
+    download.on('error', function error(err) {
+        console.log(`error`)
+        var event = {
+            error: err
+        }
+        eventEmitter.emit(`error-${id}`, event)
+        eventEmitter.emit(`error`, event)
+    });
+    
+    FileStorageService.storeAs(download, targetFile).then(finalFile => {
+        var event = {
+            filename: finalFile
+        }
+        eventEmitter.emit(`finished-${id}`, event)
+        eventEmitter.emit(`finished`, event)
+    })
+
+    return new DownloadEvents(id, metadata)
+}
+
+
+module.exports = {
+
+    download: (url, options) => {
+        return getInfo(url)
+            .then(info => {
+                return downloadWithMetaData(url, info, options)
+            })
+            .catch(err => {
+                console.error('An error occurred', err)
+            })
+    }
 
 }

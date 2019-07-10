@@ -14,8 +14,7 @@
     "express": "^4.17.1",
     "express-ws": "^4.0.0",
     "fluent-ffmpeg": "^2.1.2",
-    "youtube-dl": "^2.0.0",
-    "youtube-mp3-downloader": "^0.5.3"
+    "youtube-dl": "^2.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"

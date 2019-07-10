@@ -157,6 +157,17 @@ module.exports = {
             .catch(err => {
                 console.error('An error occurred', err)
             })
+    },
+
+    getSupportedStreams: () => {
+        return new Promise((resolve, reject) => {
+            youtubedl.getExtractors(true, (err, extractors) => {
+                if (err) {
+                    return reject(err)
+                }
+                resolve(extractors)
+            })
+        })
     }
 
 }

@@ -4,29 +4,6 @@ const DownloadService = require('../service/DownloadService')
 const router = express.Router()
 
 
-router.get('/info', (req, res) => {
-    res.status(200).send({
-        supported: [] //DownloadService.getSupportedSites()
-    })
-})
-
-// Trigger download via HTTP request
-// router.get('/', (req, res) => {
-//     const code = req.query.code
-
-//     if (!code) {
-//         res.status(400).send({
-//             error: `Parameter 'code' is missing`
-//         })
-//         return
-//     }
-//     console.log(`Downloading Youtube video ${code} as MP3`)
-
-//     AudioDownloadService.download(code)
-//     res.status(204).send()
-// })
-
-
 // Trigger and subscribe download via Websocket
 // Example: ws://localhost:3009/api/audio/download?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DKpOtuoHL45Y
 router.ws('/download', function (ws, req) {
@@ -59,6 +36,6 @@ router.ws('/download', function (ws, req) {
     })
 
 
-  })
+})
 
 module.exports = router

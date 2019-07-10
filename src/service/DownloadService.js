@@ -9,6 +9,8 @@ const EventEmitter = require('events')
 const eventEmitter = new EventEmitter()
 const rootPath = process.cwd()
 
+const outputPath = process.env.FFMPEG_PATH || path.join(rootPath, 'output')
+const ffmpegPath = process.env.FFMPEG_PATH || path.join(rootPath, 'ffmpeg-4.1.3-i686-static', 'ffmpeg')
 
 
 class DownloadEvents {
@@ -50,11 +52,32 @@ class DownloadEvents {
 
 module.exports = {
 
+    // TODO: Move this and all fs related stuff to separate service...
+
+    getFiles: () => {
+        const files = fs.readdirSync(outputPath, 'utf8');
+        const result = [];
+        for (let file of files) {
+            const extension = path.extname(file)
+            const fileStats = fs.statSync(path.join(outputPath, file))
+            result.push({
+                name: file,
+                extension: extension.replace(/\./i, ''),
+                sizeInBytes: fileStats.size,
+                createdAt: fileStats.birthtime,
+            })
+        }
+        return result
+    },
+
+    getFilePath: (filename) => {
+        const filepath = path.join(outputPath, filename)
+        return fs.existsSync(filepath) ? filepath : null
+    },
+
     download: (url, options = {}) => {
 
         var format = options.format || 'mp3'
-        var outputPath = options.outputPath || process.env.FFMPEG_PATH || path.join(rootPath, 'output')
-        var ffmpegPath = process.env.FFMPEG_PATH || path.join(rootPath, 'ffmpeg-4.1.3-i686-static', 'ffmpeg')
         
         if (!fs.existsSync(outputPath)){
             fs.mkdirSync(outputPath);

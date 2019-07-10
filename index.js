@@ -13,6 +13,7 @@ app.use(bodyParser.json())
 
 app.use('/api/audio', require('./src/routes/audio'))
 app.use('/api/video', require('./src/routes/video'))
+app.use('/api/files', require('./src/routes/files'))
 
 const port = process.env.PORT || 3009
 app.listen(port)

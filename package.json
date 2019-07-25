@@ -14,6 +14,7 @@
     "express": "^4.17.1",
     "express-ws": "^4.0.0",
     "fluent-ffmpeg": "^2.1.2",
+    "mediaserver": "^0.1.1",
     "youtube-dl": "^2.0.0"
   },
   "devDependencies": {

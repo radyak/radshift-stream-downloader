@@ -42,8 +42,34 @@ class DownloadEvents {
     }
 }
 
+const filterBestOption = (options, isForAudioDownload) => {
 
-const getInfo = (url) => {
+    let bestOptions
+
+    if (isForAudioDownload) {
+        // Best Option for Audio: format_note 'tiny' and smallest file (quality remains the same anyway)
+        bestOptions = options
+            .filter((format => 
+                format.format_note === 'tiny'
+                || (format.width === null && format.height === null)
+            ))
+            .sort(
+                (a, b) => a.filesize - b.filesize
+            )
+    } else {
+        // Best Option for Audio: extension 'mp4' and biggest files / best quality
+        bestOptions = options
+            .filter(format => format.ext === 'mp4')
+            .sort(
+                (a, b) => b.filesize - a.filesize
+            )
+    }
+
+    return bestOptions ? bestOptions[0] : null;
+
+}
+
+const getInfo = (url, options) => {
 
     return new Promise((resolve, reject) => {
         youtubedl.getInfo(url, [], function(err, info) {
@@ -51,7 +77,13 @@ const getInfo = (url) => {
                 reject(err)
                 return
             }
-            
+
+            // require('fs').writeFileSync('./log.json', JSON.stringify(info))
+
+            let bestOption = filterBestOption(info.formats, options.format === 'mp3');
+
+            console.log('Best option:', bestOption)
+
             var metadata = {
                 // youtube-dl metadata
                 extractor_key: info.extractor_key,
@@ -62,12 +94,11 @@ const getInfo = (url) => {
                 channel_url: info.channel_url,
                 
                 // file metadata
-                width: info.width,
+                width: bestOption.width,
                 duration: info.duration,
-                height: info.height,
-                resolution: info.resolution,
-                format_id: info.format_id,
-                size: info.filesize,
+                height: bestOption.height,
+                format_id: bestOption.format_id,
+                size: bestOption.filesize,
                 
                 // content metadata
                 artist: info.artist,
@@ -80,7 +111,7 @@ const getInfo = (url) => {
                 thumbnail: info.thumbnail,
             }
 
-            console.log(metadata)
+            console.log('Download Metadata:', metadata)
 
             resolve(metadata)
         });
@@ -93,7 +124,9 @@ const downloadWithMetaData = (url, metadata, options = {}) => {
 
     console.log(`Downloading from ${url}`)
 
-    var download = youtubedl(url, [], { cwd: __dirname })
+    var download = youtubedl(url, [
+        `--format=${metadata.format_id}`
+    ], { cwd: __dirname })
 
     var downloadStart = new Date().getTime()
     var format = options.format || 'mp3'
@@ -153,6 +186,7 @@ const downloadWithMetaData = (url, metadata, options = {}) => {
           }
           eventEmitter.emit(`progress-${id}`, event)
           eventEmitter.emit(`progress`, event)
+          console.log('event', event)  
         }
 
     })
@@ -185,7 +219,7 @@ const downloadWithMetaData = (url, metadata, options = {}) => {
 module.exports = {
 
     download: (url, options) => {
-        return getInfo(url)
+        return getInfo(url, options)
             .then(info => {
                 return downloadWithMetaData(url, info, options)
             })

@@ -94,7 +94,8 @@ const downloadWithMetaData = (url, metadata, options = {}) => {
     console.log(`Downloading from ${url}`)
 
     var download = youtubedl(url, [], { cwd: __dirname })
-    
+
+    var downloadStart = new Date().getTime()
     var format = options.format || 'mp3'
     var size = metadata.size
     var position = 0
@@ -108,17 +109,47 @@ const downloadWithMetaData = (url, metadata, options = {}) => {
         start: new Date().toISOString()
     }
 
+    // console.log('metadata', metadata)
+
     eventEmitter.emit(`start`, {
         ...metadata
     })
 
+    var step = 0,
+        intervalPosition = 0,
+        intervalStart = new Date().getTime()
+    const stepThreshold = 10
+
     download.on('data', function data(chunk) {
+
+        ++step
+        intervalPosition += chunk.length
         position += chunk.length
+        
+
+        if (step < stepThreshold) {
+            return
+        }
+
+        var intervalEnd = new Date().getTime()
+        var intervalInSeconds = (intervalEnd - intervalStart) / 1000
+        var speed = intervalPosition / intervalInSeconds
+
+        // console.log('speed:', speed)
+        // console.log('interval:', intervalInSeconds)
+        // console.log('\n')
+
+        step = 0
+        intervalPosition = 0
+        intervalStart = new Date().getTime()
+
 
         if (size) {
           var percentage = position / size
+          var eta = (1 - percentage) * size / speed
           var event = {
-              progress: percentage
+              progress: percentage,
+              eta: eta
           }
           eventEmitter.emit(`progress-${id}`, event)
           eventEmitter.emit(`progress`, event)
@@ -136,8 +167,12 @@ const downloadWithMetaData = (url, metadata, options = {}) => {
     });
     
     FileStorageService.storeAs(download, targetFile).then(finalFile => {
+
+        var downloadEnd = new Date().getTime()
         var event = {
-            filename: finalFile
+            ...metadata,
+            filename: finalFile,
+            duration: `${ (downloadEnd - downloadStart) / 1000 }s`
         }
         eventEmitter.emit(`finished-${id}`, event)
         eventEmitter.emit(`finished`, event)

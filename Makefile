@@ -4,7 +4,7 @@
 IMAGE=radshift-stream-downloader
 REPO=radyak
 
-BASE_IMAGE_ARM32=arm32v7/node:lts-slim
+BASE_IMAGE_ARM32=arm32v7/node:lts-alpine
 BASE_IMAGE_X86=node:lts-alpine
 
 FFMPEG_ARM32=ffmpeg-4.1.3-armhf-static
@@ -20,7 +20,7 @@ default:
 
 ## arm32
 
-build.arm32:
+build.arm32: setup
 	docker run --rm --privileged multiarch/qemu-user-static:register --reset
 	docker build -t $(REPO)/$(IMAGE):$(TAG) --build-arg FFMPEG=$(FFMPEG_ARM32) --build-arg BASE_IMAGE=$(BASE_IMAGE_ARM32) .
 
@@ -31,7 +31,7 @@ deploy.arm32: build.arm32
 
 ## x86
 
-build.x86: clean
+build.x86: setup clean
 	docker build -t $(REPO)/$(IMAGE):$(TAG_X86) --build-arg FFMPEG=$(FFMPEG_X86) --build-arg BASE_IMAGE=$(BASE_IMAGE_X86) .
 
 deploy.x86: build.x86

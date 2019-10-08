@@ -47,12 +47,12 @@ clean:
 
 ## dev
 
-run.dev:
-	npm run watch
+run.dev.backend:
+	cd backend && npm run watch
 
 setup:
-	tar xvf ffmpeg/ffmpeg-release-i686-static.tar.xz
-	tar xvf ffmpeg/ffmpeg-release-armhf-static.tar.xz
+	tar xvf backend/ffmpeg/ffmpeg-release-i686-static.tar.xz -C backend
+	tar xvf backend/ffmpeg/ffmpeg-release-armhf-static.tar.xz -C backend
 
 
 

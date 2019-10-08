@@ -17,6 +17,8 @@ app.use('/api/video', require('./src/routes/video'))
 app.use('/api/files', require('./src/routes/files'))
 app.use('/api/streams', require('./src/routes/streams'))
 
+app.use('/', express.static('/usr/src/frontend/dist/frontend'))
+
 const port = process.env.PORT || 3009
 app.listen(port)
 console.log(`Lisitening on port ${port}`)

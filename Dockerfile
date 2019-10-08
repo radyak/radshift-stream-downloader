@@ -1,6 +1,22 @@
 ARG BASE_IMAGE
 
-FROM ${BASE_IMAGE}
+
+
+## Frontend
+FROM node:10 AS frontend-build
+
+WORKDIR /usr/src/frontend
+
+COPY ./frontend/package*.json ./
+RUN npm install --only=production
+COPY ./frontend ./
+
+RUN npm run build-prod
+
+
+
+## Backend
+FROM ${BASE_IMAGE} AS runtime
 
 ARG FFMPEG
 
@@ -15,13 +31,11 @@ RUN apk add --update \
   && rm -rf /var/cache/apk/*
 
 WORKDIR /usr/src/app
-
-COPY package*.json ./
+COPY ./backend/package*.json ./
 RUN npm install --only=production
-
-COPY ${FFMPEG} ${FFMPEG}
-COPY src src
-COPY index.js .
+COPY ./backend/${FFMPEG} ${FFMPEG}
+COPY ./backend .
+COPY --from=frontend-build /usr/src/frontend /usr/src/frontend
 
 RUN mkdir -p /usr/src/app/output
 

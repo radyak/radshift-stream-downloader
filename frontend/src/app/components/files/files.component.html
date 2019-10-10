@@ -1,0 +1,40 @@
+<div class="container">
+
+    <mat-accordion>
+
+        <mat-expansion-panel *ngFor="let file of files">
+
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <mat-icon *ngIf="file.extension === 'mp3'">music_note</mat-icon>
+                    <mat-icon *ngIf="file.extension === 'mp4'">ondemand_video</mat-icon>
+                    {{ file.name }}
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <table>
+                <tr>
+                    <td>Extension:</td>
+                    <td>{{ file.extension }}</td>
+                </tr>
+                <tr>
+                    <td>Size:</td>
+                    <td>{{ file.sizeInBytes | filesize }}</td>
+                </tr>
+                <tr>
+                    <td>Created:</td>
+                    <td>{{ file.createdAt | date: 'd MMM y, hh:mm:ss' }}</td>
+                </tr>
+            </table>
+
+            <div class="button-row">
+                <button mat-raised-button color="primary" (click)="download(file.name)">
+                    <mat-icon>save_alt</mat-icon>
+                    Download
+                </button>
+            </div>
+
+        </mat-expansion-panel>
+    </mat-accordion>
+
+</div>

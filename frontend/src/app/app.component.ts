@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BackendService } from './service/backend.service';
-import { File } from './model/file';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -9,20 +8,31 @@ import { File } from './model/file';
 })
 export class AppComponent implements OnInit {
 
-  private files: File[];
+  navLinks: any[];
+  activeLinkIndex = -1;
 
-  constructor(private backendService: BackendService) { }
-
-  ngOnInit() {
-    this.backendService.getFiles().subscribe(data => {
-      this.files = data
-    }); 
+  constructor(private router: Router) {
+    this.navLinks = [
+      {
+          label: 'Start',
+          link: './start',
+          index: 0
+      }, {
+          label: 'Downloads',
+          link: './downloads',
+          index: 1
+      }, {
+          label: 'Files',
+          link: './files',
+          index: 2
+      }, 
+    ];
   }
 
-  download(file: string) {
-    this.backendService.getFile(file).subscribe(res => {
-      console.log(res)
-    }); 
+  ngOnInit() {
+    this.router.events.subscribe((res) => {
+      this.activeLinkIndex = this.navLinks.indexOf(this.navLinks.find(tab => tab.link === '.' + this.router.url));
+    });
   }
 
 }

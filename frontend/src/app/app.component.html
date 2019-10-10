@@ -10,61 +10,14 @@
 
 </mat-toolbar>
 
-<mat-tab-group mat-stretch-tabs class="full-width">
-
-  <mat-tab label="Start">
-    <div class="container">
-      <mat-form-field appearance="outline">
-        <mat-label>Paste a video link here</mat-label>
-        <input matInput placeholder="e.g. https://www.youtube.com/watch?v=...">
-        <mat-icon matSuffix>insert_link</mat-icon>
-        <mat-hint>
-          For a list of supported site click <a href="#">here</a>
-        </mat-hint>
-      </mat-form-field>
-    </div>
-  </mat-tab>
-
-  <mat-tab label="Downloads"> Content 2 </mat-tab>
-  
-  <mat-tab label="Files">
-      <div class="container">
-
-          <mat-accordion>
-
-            <mat-expansion-panel *ngFor="let file of files">
-
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <mat-icon *ngIf="file.extension === 'mp3'">music_note</mat-icon>
-                  <mat-icon *ngIf="file.extension === 'mp4'">ondemand_video</mat-icon>
-                  {{ file.name }}
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              
-              <table>
-                <tr>
-                  <td>Extension:</td>
-                  <td>{{ file.extension }}</td>
-                </tr>
-                <tr>
-                  <td>Size:</td>
-                  <td>{{ file.sizeInBytes / 1024 / 1024 }} MB</td>
-                </tr>
-                <tr>
-                  <td>Created:</td>
-                  <td>{{ file.createdAt | date }}</td>
-                </tr>
-              </table>
-
-              <button mat-raised-button color="primary" (click)="download(file.name)">
-                <mat-icon>save_alt</mat-icon>
-                Download
-              </button>
-
-            </mat-expansion-panel>
-          </mat-accordion>
-            
-      </div>
-  </mat-tab>
-</mat-tab-group>
+<nav mat-tab-nav-bar mat-stretch-tabs class="full-width">
+  <a mat-tab-link
+  *ngFor="let link of navLinks"
+  [routerLink]="link.link"
+  routerLinkActive
+  #rla="routerLinkActive"
+  [active]="rla.isActive">
+    {{ link.label }}
+  </a>
+</nav>
+<router-outlet></router-outlet>

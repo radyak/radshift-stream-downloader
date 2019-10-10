@@ -1,0 +1,20 @@
+
+.fill {
+    /* This fills the remaining space, by using flexbox. 
+        Every toolbar row uses a flexbox row layout. */
+    flex: 1 1 auto;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.container > * {
+    width: 80%;
+    margin: 5rem 10%;
+}

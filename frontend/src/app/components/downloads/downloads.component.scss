@@ -1,0 +1,36 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.container > * {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.container > mat-form-field,
+.container > button {
+    margin-top: 10%;
+}
+
+.mat-button-toggle {
+    width: 50%;
+    color: rgba(255, 255, 255, 0.35) !important;
+
+    mat-icon {
+        color: rgba(255, 255, 255, 0.35) !important;
+    }
+}
+
+.mat-button-toggle-checked {
+
+    // Not possible to access primary color... -_-
+    background: #c2185b;
+
+    color: #fff !important;
+
+    mat-icon {
+        color: #fff !important;
+    }
+}

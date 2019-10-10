@@ -12,15 +12,15 @@ import { MatInputModule } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
-import { StartComponent } from './components/start/start.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle'; 
 import { DownloadsComponent } from './components/downloads/downloads.component';
 import { FilesComponent } from './components/files/files.component';
+
 import { FilesizePipe } from './pipes/filesize.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    StartComponent,
     DownloadsComponent,
     FilesComponent,
     FilesizePipe
@@ -36,6 +36,7 @@ import { FilesizePipe } from './pipes/filesize.pipe';
     MatInputModule,
     MatExpansionModule,
     MatButtonModule,
+    MatButtonToggleModule,
     HttpClientModule
   ],
   providers: [],

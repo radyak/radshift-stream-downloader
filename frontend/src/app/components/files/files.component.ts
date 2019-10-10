@@ -23,22 +23,4 @@ export class FilesComponent implements OnInit {
     this.backendService.getFile(file);
   }
 
-  // getDisplayFileSize(sizeInBytes: number): string {
-  //   if (sizeInBytes < 1024) {
-  //     return `${this.round(sizeInBytes)} byte`
-  //   }
-  //   let sizeInKb = sizeInBytes / 1024
-  //   if (sizeInKb < 1024) {
-  //     return `${this.round(sizeInKb)} kB`
-  //   }
-  //   let sizeInMb = sizeInKb / 1024
-  //   if (sizeInMb < 1024) {
-  //     return `${this.round(sizeInMb)} MB`
-  //   }
-  //   return `${this.round(sizeInMb) / 1024} GB`
-  // }
-
-  // round(number: number): number {
-  //   return Math.round(number * 100) / 100
-  // }
 }

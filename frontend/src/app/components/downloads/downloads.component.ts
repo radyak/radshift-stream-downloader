@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DownloadsComponent implements OnInit {
 
+  private audioOnly: boolean = false;
+
   constructor() { }
 
   ngOnInit() {

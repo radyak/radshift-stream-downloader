@@ -7,7 +7,7 @@
   <!-- This fills the remaining space of the current row -->
   <!-- <span class="fill"></span>
   <span>Right Aligned Text</span> -->
-  
+
 </mat-toolbar>
 
 <mat-tab-group mat-stretch-tabs class="full-width">
@@ -27,5 +27,44 @@
 
   <mat-tab label="Downloads"> Content 2 </mat-tab>
   
-  <mat-tab label="Files"> Content 3 </mat-tab>
+  <mat-tab label="Files">
+      <div class="container">
+
+          <mat-accordion>
+
+            <mat-expansion-panel *ngFor="let file of files">
+
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon *ngIf="file.extension === 'mp3'">music_note</mat-icon>
+                  <mat-icon *ngIf="file.extension === 'mp4'">ondemand_video</mat-icon>
+                  {{ file.name }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              
+              <table>
+                <tr>
+                  <td>Extension:</td>
+                  <td>{{ file.extension }}</td>
+                </tr>
+                <tr>
+                  <td>Size:</td>
+                  <td>{{ file.sizeInBytes / 1024 / 1024 }} MB</td>
+                </tr>
+                <tr>
+                  <td>Created:</td>
+                  <td>{{ file.createdAt | date }}</td>
+                </tr>
+              </table>
+
+              <button mat-raised-button color="primary" (click)="download(file.name)">
+                <mat-icon>save_alt</mat-icon>
+                Download
+              </button>
+
+            </mat-expansion-panel>
+          </mat-accordion>
+            
+      </div>
+  </mat-tab>
 </mat-tab-group>

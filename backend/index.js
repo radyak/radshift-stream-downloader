@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser')
 const express = require('express')
+const cors = require('cors')
 const app = express()
 
 require('express-ws')(app)
@@ -10,6 +11,9 @@ app.use(
   })
 )
 app.use(bodyParser.json())
+app.use(cors({
+  origin: 'http://localhost:4200'
+}))
 
 app.use('/api/info', require('./src/routes/info'))
 app.use('/api/audio', require('./src/routes/audio'))

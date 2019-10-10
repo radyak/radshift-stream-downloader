@@ -11,19 +11,24 @@ const ffmpegPath = process.env.FFMPEG_PATH || path.join(rootPath, 'ffmpeg-4.1.3-
 module.exports = {
 
     getFiles: () => {
-        const files = fs.readdirSync(outputPath, 'utf8');
-        const result = [];
-        for (let file of files) {
-            const extension = path.extname(file)
-            const fileStats = fs.statSync(path.join(outputPath, file))
-            result.push({
-                name: file,
-                extension: extension.replace(/\./i, ''),
-                sizeInBytes: fileStats.size,
-                createdAt: fileStats.birthtime,
-            })
+        try {
+            const files = fs.readdirSync(outputPath, 'utf8');
+            const result = [];
+            for (let file of files) {
+                const extension = path.extname(file)
+                const fileStats = fs.statSync(path.join(outputPath, file))
+                result.push({
+                    name: file,
+                    extension: extension.replace(/\./i, ''),
+                    sizeInBytes: fileStats.size,
+                    createdAt: fileStats.birthtime,
+                })
+            }
+            return result
+        } catch (e) {
+            console.error(e)
+            return []
         }
-        return result
     },
 
     getFilePath: (filename) => {

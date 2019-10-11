@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BackendService } from 'src/app/services/backend.service';
+import { FilesService } from 'src/app/services/files.service';
 import { File } from 'src/app/model/file';
 
 @Component({
@@ -11,16 +11,16 @@ export class FilesComponent implements OnInit {
 
   private files: File[];
 
-  constructor(private backendService: BackendService) { }
+  constructor(private filesService: FilesService) { }
 
   ngOnInit() {
-    this.backendService.getFiles().subscribe(data => {
+    this.filesService.getFiles().subscribe(data => {
       this.files = data
     });
   }
 
   download(file: string): void {
-    this.backendService.getFile(file);
+    this.filesService.getFile(file);
   }
 
 }

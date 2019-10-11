@@ -20,4 +20,8 @@ export class StartComponent implements OnInit {
     })
   }
 
+  startDownload(): void {
+    
+  }
+
 }

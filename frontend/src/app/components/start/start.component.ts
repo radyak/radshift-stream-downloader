@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-start',
@@ -8,10 +9,15 @@ import { Component, OnInit } from '@angular/core';
 export class StartComponent implements OnInit {
 
   private audioOnly: boolean = false;
+  private link: string;
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.route.queryParamMap.subscribe(params => {
+      this.link = decodeURIComponent(params.get('link'));
+      this.audioOnly = params.get('type') === 'audio';
+    })
   }
 
 }

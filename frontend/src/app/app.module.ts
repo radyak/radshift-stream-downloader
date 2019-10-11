@@ -16,6 +16,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { DownloadsComponent } from './components/downloads/downloads.component';
 import { FilesComponent } from './components/files/files.component';
+import { FormsModule } from '@angular/forms';
 
 import { FilesizePipe } from './pipes/filesize.pipe';
 import { StartComponent } from './components/start/start.component';
@@ -31,6 +32,7 @@ import { StartComponent } from './components/start/start.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     BrowserAnimationsModule,
     MatTabsModule,
     MatToolbarModule,

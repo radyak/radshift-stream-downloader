@@ -14,13 +14,17 @@ export class AppComponent implements OnInit {
   constructor(private router: Router) {
     this.navLinks = [
       {
-          label: 'Downloads',
-          link: './downloads',
-          index: 0
+        label: 'Start',
+        link: './start',
+        index: 0
       }, {
-          label: 'Files',
-          link: './files',
-          index: 1
+        label: 'Downloads',
+        link: './downloads',
+        index: 1
+      }, {
+        label: 'Files',
+        link: './files',
+        index: 2
       }, 
     ];
   }

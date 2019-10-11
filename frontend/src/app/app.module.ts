@@ -18,13 +18,15 @@ import { DownloadsComponent } from './components/downloads/downloads.component';
 import { FilesComponent } from './components/files/files.component';
 
 import { FilesizePipe } from './pipes/filesize.pipe';
+import { StartComponent } from './components/start/start.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DownloadsComponent,
     FilesComponent,
-    FilesizePipe
+    FilesizePipe,
+    StartComponent
   ],
   imports: [
     BrowserModule,

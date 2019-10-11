@@ -1,17 +1,20 @@
+a {
+    color: #c2185b;
+}
+
 .container {
+    padding: 10%;
+    color: #fff;
+}
+
+section {
     display: flex;
     flex-direction: column;
+    padding-bottom: 10%;
 }
 
-.container > * {
-    width: 80%;
-    margin-left: 10%;
-    margin-right: 10%;
-}
-
-.container > mat-form-field,
-.container > button {
-    margin-top: 10%;
+label {
+    padding-bottom: 0.67rem;
 }
 
 .mat-button-toggle {
@@ -33,4 +36,9 @@
     mat-icon {
         color: #fff !important;
     }
+}
+
+.mat-raised-button {
+    font-size: 1rem;
+    padding: 1rem;
 }

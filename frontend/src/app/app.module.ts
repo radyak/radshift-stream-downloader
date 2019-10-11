@@ -12,7 +12,8 @@ import { MatInputModule } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
-import { MatButtonToggleModule } from '@angular/material/button-toggle'; 
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatDividerModule } from '@angular/material/divider';
 import { DownloadsComponent } from './components/downloads/downloads.component';
 import { FilesComponent } from './components/files/files.component';
 
@@ -37,6 +38,7 @@ import { FilesizePipe } from './pipes/filesize.pipe';
     MatExpansionModule,
     MatButtonModule,
     MatButtonToggleModule,
+    MatDividerModule,
     HttpClientModule
   ],
   providers: [],

@@ -17,11 +17,11 @@ export class FilesizePipe implements PipeTransform {
     if (fileSizeInMb < 1024) {
       return `${this.round(fileSizeInMb)} MB`
     }
-    return `${this.round(fileSizeInMb) / 1024} GB`
+    return `${this.round(fileSizeInMb / 1024)} GB`
   }
 
-  round(number: number): number {
-    return Math.round(number * 100) / 100
+  round(number: number): string {
+    return number.toFixed(2)
   }
 
 }

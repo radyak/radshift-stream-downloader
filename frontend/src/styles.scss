@@ -15,3 +15,10 @@ mat-icon,
 input {
     color: #fff !important;
 }
+
+.mat-progress-bar-buffer {
+    background-color: rgba($color: #fff, $alpha: 0.67);
+}
+.mat-progress-bar-background {
+    display: none;
+}

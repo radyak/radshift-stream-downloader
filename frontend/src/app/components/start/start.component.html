@@ -1,48 +1,35 @@
 <div class="container">
 
-        <section>
-            <mat-form-field appearance="outline">
-                <mat-label>Paste a video link here</mat-label>
-                <input
-                    matInput
-                    placeholder="e.g. https://www.youtube.com/watch?v=..."
-                    name="link"
-                    [(ngModel)]="link"
-                >
-                <mat-icon matSuffix>insert_link</mat-icon>
-                <mat-hint>
-                    For a list of supported video sites click <a href="#">here</a>
-                </mat-hint>
-            </mat-form-field>
-        </section>
-    
-        <section>
-            <label>
-                Download as:
-            </label>
-            <mat-button-toggle-group>
-                <mat-button-toggle
-                    value="audio"
-                    aria-label="Audio"
-                    [checked]="audioOnly" 
-                    (change)="audioOnly = true">
-                    <mat-icon>music_note</mat-icon> Audio
-                </mat-button-toggle>
-                <mat-button-toggle
-                    value="video"
-                    aria-label="Video"
-                    [checked]="!audioOnly" 
-                    (change)="audioOnly = false">
-                    <mat-icon>ondemand_video</mat-icon> Video
-                </mat-button-toggle>
-            </mat-button-toggle-group>
-        </section>
-    
-        <section>
-            <button mat-raised-button color="primary" (click)="startDownload()">
-                <mat-icon>play_arrow</mat-icon>
-                Start Download
-            </button>
-        </section>
-    
-    </div>
+    <section>
+        <mat-form-field appearance="outline">
+            <mat-label>Paste a video link here</mat-label>
+            <input matInput placeholder="e.g. https://www.youtube.com/watch?v=..." name="link" [(ngModel)]="link">
+            <mat-icon matSuffix>insert_link</mat-icon>
+            <mat-hint>
+                For a list of supported video sites click <a href="#">here</a>
+            </mat-hint>
+        </mat-form-field>
+    </section>
+
+    <section>
+        <label>
+            Download as:
+        </label>
+        <mat-button-toggle-group>
+            <mat-button-toggle value="audio" aria-label="Audio" [checked]="audioOnly" (change)="audioOnly = true">
+                <mat-icon>music_note</mat-icon> Audio
+            </mat-button-toggle>
+            <mat-button-toggle value="video" aria-label="Video" [checked]="!audioOnly" (change)="audioOnly = false">
+                <mat-icon>ondemand_video</mat-icon> Video
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+    </section>
+
+    <section>
+        <button mat-raised-button color="primary" (click)="startDownload()">
+            <mat-icon>play_arrow</mat-icon>
+            Start Download
+        </button>
+    </section>
+
+</div>

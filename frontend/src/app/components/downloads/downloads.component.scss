@@ -1,0 +1,20 @@
+.container {
+    padding: 10%;
+    color: #fff;
+}
+
+.progress-label {
+    padding: 0.5rem 0;
+
+    &.main {
+        font-size: 1.3rem;
+    }
+
+    & .right {
+        float: right;
+    }
+}
+
+section {
+    margin-bottom: 2rem;
+}

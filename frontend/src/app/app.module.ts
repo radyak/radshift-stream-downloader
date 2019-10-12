@@ -14,6 +14,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatProgressBarModule } from '@angular/material/progress-bar'; 
 import { DownloadsComponent } from './components/downloads/downloads.component';
 import { FilesComponent } from './components/files/files.component';
 import { FormsModule } from '@angular/forms';
@@ -43,6 +44,7 @@ import { StartComponent } from './components/start/start.component';
     MatButtonModule,
     MatButtonToggleModule,
     MatDividerModule,
+    MatProgressBarModule,
     HttpClientModule
   ],
   providers: [],

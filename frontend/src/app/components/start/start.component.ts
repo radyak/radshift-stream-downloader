@@ -15,7 +15,9 @@ export class StartComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParamMap.subscribe(params => {
-      this.link = decodeURIComponent(params.get('link'));
+      if (params.get('link')) {
+        this.link = decodeURIComponent(params.get('link'));
+      }
       this.audioOnly = params.get('type') === 'audio';
     })
   }

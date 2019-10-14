@@ -20,4 +20,8 @@ export class FilesService {
   public getFile(filename: string): void {
     window.location.href = `${this.BASE_URL}/api/files/${filename}`;
   }
+
+  public startStream(filename: string): void {
+    window.location.href = `${this.BASE_URL}/api/streams/${filename}`;
+  }
 }

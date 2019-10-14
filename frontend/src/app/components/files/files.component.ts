@@ -23,4 +23,8 @@ export class FilesComponent implements OnInit {
     this.filesService.getFile(file);
   }
 
+  startStream(file: string): void {
+    this.filesService.startStream(file);
+  }
+
 }

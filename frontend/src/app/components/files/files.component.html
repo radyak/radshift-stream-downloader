@@ -28,6 +28,10 @@
             </table>
 
             <div class="button-row">
+                <button mat-raised-button color="primary" (click)="startStream(file.name)">
+                    <mat-icon>play_circle_outline</mat-icon>
+                    Stream
+                </button>
                 <button mat-raised-button color="primary" (click)="download(file.name)">
                     <mat-icon>save_alt</mat-icon>
                     Download

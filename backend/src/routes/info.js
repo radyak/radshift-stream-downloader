@@ -8,10 +8,7 @@ router.get('/', (req, res) => {
     DownloadService.getSupportedStreams()
         .then(streams => {
             res.status(200).send({
-                supported: {
-                    count: streams.length,
-                    list: streams
-                }
+                supported: streams
             })
         })
 })

@@ -16,8 +16,7 @@ app.use(cors({
 }))
 
 app.use('/api/info', require('./src/routes/info'))
-app.use('/api/audio', require('./src/routes/audio'))
-app.use('/api/video', require('./src/routes/video'))
+app.use('/api/downloads', require('./src/routes/downloads'))
 app.use('/api/files', require('./src/routes/files'))
 app.use('/api/streams', require('./src/routes/streams'))
 

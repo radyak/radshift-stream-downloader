@@ -14,13 +14,15 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatProgressBarModule } from '@angular/material/progress-bar'; 
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; 
 import { DownloadsComponent } from './components/downloads/downloads.component';
 import { FilesComponent } from './components/files/files.component';
 import { FormsModule } from '@angular/forms';
 
 import { FilesizePipe } from './pipes/filesize.pipe';
 import { StartComponent } from './components/start/start.component';
+import { TimespanPipe } from './pipes/timespan.pipe';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import { StartComponent } from './components/start/start.component';
     DownloadsComponent,
     FilesComponent,
     FilesizePipe,
-    StartComponent
+    StartComponent,
+    TimespanPipe
   ],
   imports: [
     BrowserModule,
@@ -45,6 +48,7 @@ import { StartComponent } from './components/start/start.component';
     MatButtonToggleModule,
     MatDividerModule,
     MatProgressBarModule,
+    MatProgressSpinnerModule,
     HttpClientModule
   ],
   providers: [],

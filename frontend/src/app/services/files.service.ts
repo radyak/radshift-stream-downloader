@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class FilesService {
 
-  private BASE_URL:string = environment.serverUrl;
+  private BASE_URL: string = environment.serverUrl;
 
   constructor(private httpClient: HttpClient) { }
 

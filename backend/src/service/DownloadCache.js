@@ -79,6 +79,10 @@ module.exports = {
         download.progress.end = data.end
         download.progress.duration = data.duration
         download.targetFile = data.filename
+        download.progress.percentage = 1
+        download.progress.eta = 0
+        download.progress.position = null
+        download.progress.speed = 0
 
         publish(download)
     },

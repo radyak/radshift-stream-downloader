@@ -114,7 +114,7 @@ const downloadWithMetaData = (url, metadata, options = {}) => {
           var percentage = position / size
           var eta = (1 - percentage) * size / speed
           DownloadCache.updateDownload(download.id, {
-            percentage: percentage,
+            percentage: Math.round(percentage * 100),
             eta: eta,
             position: position,
             speed: speed

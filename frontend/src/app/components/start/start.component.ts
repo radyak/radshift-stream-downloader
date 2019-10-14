@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DownloadsService } from 'src/app/services/downloads.service';
 
 @Component({
   selector: 'app-start',
@@ -10,8 +11,12 @@ export class StartComponent implements OnInit {
 
   private audioOnly: boolean = false;
   private link: string;
+  private loading: boolean = false;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(
+    private route: ActivatedRoute,
+    private downloadService: DownloadsService,
+    private router: Router) { }
 
   ngOnInit() {
     this.route.queryParamMap.subscribe(params => {
@@ -23,7 +28,13 @@ export class StartComponent implements OnInit {
   }
 
   startDownload(): void {
-    
+    this.loading = true;
+    this.downloadService.startDownload(this.link, this.audioOnly)
+      .subscribe(download => {
+        console.log(download);
+        this.router.navigate(['downloads']);
+        this.loading = false;
+      });
   }
 
 }

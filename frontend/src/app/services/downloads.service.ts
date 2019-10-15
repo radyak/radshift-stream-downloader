@@ -19,8 +19,8 @@ export class DownloadsService {
     });
   }
 
-  getAllDownloads(): Observable<Map<string, any>> {
-    return this.httpClient.get<any>(`${this.BASE_URL}/api/downloads`);
+  getAllDownloads(): Observable<any[]> {
+    return this.httpClient.get<any[]>(`${this.BASE_URL}/api/downloads`);
   }
 
 }

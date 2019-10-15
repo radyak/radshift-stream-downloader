@@ -29,7 +29,8 @@ module.exports = {
                        .digest('hex')
 
         var format = audioOnly ? 'mp3' : 'mp4'
-        var targetFile = `${metadata.fulltitle}.${format}`
+        var filename = metadata.fulltitle.replace(/[/.]+/g, '-');
+        var targetFile = `${filename}.${format}`
 
         var download = {
             id: id,
@@ -41,7 +42,7 @@ module.exports = {
             progress: {
                 start: new Date().getTime(),
                 percentage: 0,
-                eta: 'Unknown',
+                eta: null,
                 position: 0,
                 speed: 0
             }
@@ -79,7 +80,7 @@ module.exports = {
         download.progress.end = data.end
         download.progress.duration = data.duration
         download.targetFile = data.filename
-        download.progress.percentage = 1
+        download.progress.percentage = 100
         download.progress.eta = 0
         download.progress.position = null
         download.progress.speed = 0
@@ -95,9 +96,9 @@ module.exports = {
     },
 
     getAllDownloads: () => {
-        return {
+        return Object.values({
             ...CACHE
-        }
+        })
     },
 
     getDownload: (id) => {

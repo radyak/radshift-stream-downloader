@@ -5,9 +5,12 @@
             {{ download.targetFile }}
         </div>
         <mat-progress-bar [value]="download.progress.percentage"></mat-progress-bar>
-        <div class="progress-label">
+        <div class="progress-label" *ngIf="download.status === 'IN_PROGRESS'">
             {{ download.progress.percentage }}%
             <div class="right">[{{ timeString(download.progress.eta) }}]</div>
+        </div>
+        <div class="progress-label" *ngIf="download.status !== 'IN_PROGRESS'">
+            {{ statusLabel(download.status) }}
         </div>
     </section>
 

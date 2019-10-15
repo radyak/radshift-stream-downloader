@@ -46,8 +46,20 @@ router.get('', function (req, res) {
 // Example: ws://localhost:3009/api/audio/downloads
 router.ws('', function (ws, req) {
 
+    let open = true
+
     EventsService.on(EventsService.EVENT_NAME, event => {
-        ws.send(JSON.stringify(event))
+        if (open) {
+            ws.send(JSON.stringify(event))
+        }
+    })
+
+    ws.on('error', (error) => {
+        open = false
+    })
+
+    ws.on('close', (event) => {
+        open = false
     })
 
 })

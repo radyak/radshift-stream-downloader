@@ -8,7 +8,7 @@ FROM node:10 AS frontend-build
 WORKDIR /usr/src/frontend
 
 COPY ./frontend/package*.json ./
-RUN npm install --only=production
+RUN npm install
 COPY ./frontend ./
 
 RUN npm run build-prod

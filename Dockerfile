@@ -20,8 +20,6 @@ FROM ${BASE_IMAGE} AS runtime
 
 ARG FFMPEG
 
-COPY ./qemu-arm-static /usr/bin/qemu-arm-static
-
 RUN apk add --update \
     python \
     python-dev \

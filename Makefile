@@ -22,7 +22,6 @@ default:
 ## arm32
 
 build.arm32: setup
-	docker run --rm --privileged multiarch/qemu-user-static:register --reset
 	docker build -t $(REPO)/$(IMAGE):$(TAG) --build-arg FFMPEG=$(FFMPEG_ARM32) --build-arg BASE_IMAGE=$(BASE_IMAGE_ARM32) .
 
 deploy.arm32: build.arm32

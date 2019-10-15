@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  serverUrl: ''
+  serverUrl: '',
+  serverWsUrl: 'ws://radshift:3009'
 };

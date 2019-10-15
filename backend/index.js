@@ -20,7 +20,10 @@ app.use('/api/downloads', require('./src/routes/downloads'))
 app.use('/api/files', require('./src/routes/files'))
 app.use('/api/streams', require('./src/routes/streams'))
 
-app.use('*', express.static('/usr/src/frontend/dist/frontend'))
+app.get('*.*', express.static('/usr/src/frontend/dist/frontend'))
+app.all('*', function (req, res) {
+  res.status(200).sendFile(`/`, {root: '/usr/src/frontend/dist/frontend'})
+})
 
 const port = process.env.PORT || 3009
 app.listen(port)

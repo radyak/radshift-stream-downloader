@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DownloadsService } from 'src/app/services/downloads.service';
 import { WebSocketSubject } from 'rxjs/webSocket';
-import { stat } from 'fs';
 
 @Component({
   selector: 'app-downloads',
@@ -10,9 +9,9 @@ import { stat } from 'fs';
 })
 export class DownloadsComponent implements OnInit {
 
-  downloads: any[] = [];
-  loading: boolean = false;
-  socket: WebSocketSubject<any>;
+  public downloads: any[] = [];
+  public loading: boolean = false;
+  public socket: WebSocketSubject<any>;
   
   constructor(private downloadsService: DownloadsService) {
   }

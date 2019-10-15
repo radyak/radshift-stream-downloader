@@ -9,7 +9,7 @@ import { File } from 'src/app/model/file';
 })
 export class FilesComponent implements OnInit {
 
-  private files: File[];
+  public files: File[];
 
   constructor(private filesService: FilesService) { }
 

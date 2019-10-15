@@ -9,9 +9,9 @@ import { DownloadsService } from 'src/app/services/downloads.service';
 })
 export class StartComponent implements OnInit {
 
-  private audioOnly: boolean = false;
-  private link: string;
-  private loading: boolean = false;
+  public audioOnly: boolean = false;
+  public link: string;
+  public loading: boolean = false;
 
   constructor(
     private route: ActivatedRoute,

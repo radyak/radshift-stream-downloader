@@ -8,6 +8,15 @@ const outputPath = process.env.OUTPUT_PATH || path.join(rootPath, 'output')
 const ffmpegPath = process.env.FFMPEG_PATH || path.join(rootPath, 'ffmpeg-4.1.3-i686-static', 'ffmpeg')
 
 
+
+
+let getFilePath = (filename) => {
+    const filepath = path.join(outputPath, filename)
+    return fs.existsSync(filepath) ? filepath : null
+}
+
+
+
 module.exports = {
 
     getFiles: () => {
@@ -31,9 +40,15 @@ module.exports = {
         }
     },
 
-    getFilePath: (filename) => {
-        const filepath = path.join(outputPath, filename)
-        return fs.existsSync(filepath) ? filepath : null
+    getFilePath: getFilePath,
+
+    deleteFile: (filename) => {
+        const filepath = getFilePath(filename)
+        if (!filepath) {
+            return null
+        }
+        fs.unlinkSync(filepath)
+        return filepath
     },
 
     storeAs: (fileStream, fileName) => {

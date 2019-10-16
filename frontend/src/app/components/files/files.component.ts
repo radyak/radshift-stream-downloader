@@ -27,4 +27,10 @@ export class FilesComponent implements OnInit {
     this.filesService.startStream(file);
   }
 
+  deleteFile(file: string): void {
+    this.filesService.deleteFile(file).subscribe(data => {
+      this.files = data
+    });
+  }
+
 }

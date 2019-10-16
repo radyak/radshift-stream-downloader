@@ -8,15 +8,13 @@
                 <mat-panel-title>
                     <mat-icon *ngIf="file.extension === 'mp3'">music_note</mat-icon>
                     <mat-icon *ngIf="file.extension === 'mp4'">ondemand_video</mat-icon>
-                    {{ file.name }}
+                    <div class="label">
+                        {{ file.name }}
+                    </div>
                 </mat-panel-title>
             </mat-expansion-panel-header>
 
             <table>
-                <tr>
-                    <td>Extension:</td>
-                    <td>{{ file.extension }}</td>
-                </tr>
                 <tr>
                     <td>Size:</td>
                     <td>{{ file.sizeInBytes | filesize }}</td>
@@ -35,6 +33,10 @@
                 <button mat-raised-button color="primary" (click)="download(file.name)">
                     <mat-icon>save_alt</mat-icon>
                     Download
+                </button>
+                <button mat-raised-button color="warn" (click)="deleteFile(file.name)">
+                    <mat-icon>delete</mat-icon>
+                    Delete
                 </button>
             </div>
 

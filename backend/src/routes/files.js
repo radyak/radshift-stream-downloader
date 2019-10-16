@@ -21,6 +21,17 @@ router.get('/:filename', (req, res) => {
     res.download(filepath)
 })
 
+router.delete('/:filename', (req, res) => {
+    const deletedFilepath = FileStorageService.deleteFile(req.params.filename)
+
+    if (!deletedFilepath) {
+        console.log('Cannot DELETE', filename)
+        res.status(404).send()
+    }
+
+    res.status(200).send(FileStorageService.getFiles())
+})
+
 
 
 module.exports = router

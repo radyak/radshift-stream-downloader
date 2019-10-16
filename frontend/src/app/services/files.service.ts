@@ -24,4 +24,8 @@ export class FilesService {
   public startStream(filename: string): void {
     window.location.href = this.urlService.getUrlForPath(`/api/streams/${filename}`);
   }
+  
+  public deleteFile(filename: string): Observable<File[]> {
+    return this.httpClient.delete<File[]>(this.urlService.getUrlForPath(`/api/files/${filename}`));
+  }
 }

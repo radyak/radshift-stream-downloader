@@ -86,6 +86,8 @@ module.exports = {
         download.progress.speed = 0
 
         publish(download)
+
+        delete CACHE[id]
     },
 
     downloadError: (id) => {

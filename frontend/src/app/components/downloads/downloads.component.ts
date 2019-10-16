@@ -50,18 +50,14 @@ export class DownloadsComponent implements OnInit {
     });
   }
 
-  timeString(timeInSeconds: number): string {
-    return timeInSeconds ? Math.round(timeInSeconds) + ' s' : 'unknown'
+  public removeDownload(download): void {
+    this.downloads = this.downloads.filter(currDownload => {
+      currDownload !== download
+    });
   }
 
-  statusLabel(status: string): string {
-    switch (status) {
-      case 'STARTING': return 'Starting ...';
-      case 'ERROR': return 'Error';
-      case 'FINISHED': return 'Finished';
-      case 'COMPLETE_CONVERTING': return 'Download complete. Converting ...';
-      case 'IN_PROGRESS': return 'In Progress';
-    }
+  timeString(timeInSeconds: number): string {
+    return timeInSeconds ? Math.round(timeInSeconds) + ' s' : 'unknown'
   }
 
 }

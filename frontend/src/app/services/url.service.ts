@@ -16,7 +16,7 @@ export class UrlService {
   }
 
   getWsUrlForPath(path: string = ''): string {    
-    let baseUrl = this.getUrlForPath(path);    
+    let baseUrl = this.getUrlForPath(path);
     return baseUrl.replace(/http/g, 'ws');
   }
 

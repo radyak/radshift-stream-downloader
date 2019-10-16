@@ -13,14 +13,14 @@ export class DownloadsService {
     private urlService: UrlService) { }
 
   startDownload(url: string, audioOnly: boolean = false): Observable<any> {
-    return this.httpClient.post<any>(`${ this.urlService.getBaseUrl() }/api/downloads`, {
+    return this.httpClient.post<any>(this.urlService.getUrlForPath('/api/downloads'), {
       url: url,
       audioOnly: audioOnly
     });
   }
 
   getAllDownloads(): Observable<any[]> {
-    return this.httpClient.get<any[]>(`${ this.urlService.getBaseUrl() }/api/downloads`);
+    return this.httpClient.get<any[]>(this.urlService.getUrlForPath('/api/downloads'));
   }
 
 }

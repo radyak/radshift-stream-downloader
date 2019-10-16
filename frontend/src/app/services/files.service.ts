@@ -14,14 +14,14 @@ export class FilesService {
     private urlService: UrlService) { }
 
   public getFiles(): Observable<File[]> {
-    return this.httpClient.get<File[]>(`${ this.urlService.getBaseUrl() }/api/files`);
+    return this.httpClient.get<File[]>(this.urlService.getUrlForPath(`/api/files`));
   }
 
   public getFile(filename: string): void {
-    window.location.href = `${ this.urlService.getBaseUrl() }/api/files/${filename}`;
+    window.location.href = this.urlService.getUrlForPath(`/api/files/${filename}`);
   }
 
   public startStream(filename: string): void {
-    window.location.href = `${ this.urlService.getBaseUrl() }/api/streams/${filename}`;
+    window.location.href = this.urlService.getUrlForPath(`/api/streams/${filename}`);
   }
 }

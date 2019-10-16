@@ -24,10 +24,8 @@ export class DownloadsComponent implements OnInit {
     this.loading = true;
     this.update();
 
-    let socketUrl = `${ this.urlService.getWsBaseUrl() }api/downloads`;
-    console.log(`Connecting to ws ${socketUrl}`)
+    let socketUrl = this.urlService.getWsUrlForPath('/api/downloads');
     this.socket = new WebSocketSubject(socketUrl);
-    console.log(`Connected`)
 
     this.socket.subscribe(event => {
       

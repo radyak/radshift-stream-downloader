@@ -8,19 +8,16 @@ export class UrlService {
 
   constructor(private locationStrategy: LocationStrategy) { }
 
-  getBaseUrl(): string {    
+  getUrlForPath(path: string = ''): string {    
     let baseUrl = location.origin + this.locationStrategy.getBaseHref();
-    return baseUrl
+    let url = `${baseUrl}/${path}`;
+    url = url .replace(/(:\/\/)|(\/)+/g, "$1$2");
+    return url
   }
 
-  getWsBaseUrl(): string {    
-    let baseUrl = this.getBaseUrl();
-    
-    console.log(`Replacing ${baseUrl}`);
-    baseUrl = baseUrl.replace(/http/g, 'ws');
-    console.log(`with ${baseUrl}`);
-
-    return baseUrl
+  getWsUrlForPath(path: string = ''): string {    
+    let baseUrl = this.getUrlForPath(path);    
+    return baseUrl.replace(/http/g, 'ws');
   }
 
 }

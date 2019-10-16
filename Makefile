@@ -50,6 +50,9 @@ clean:
 run.dev.backend:
 	cd backend && npm run watch
 
+run.dev.frontend:
+	cd frontend && npm start
+
 setup:
 	tar xvf backend/ffmpeg/ffmpeg-release-i686-static.tar.xz -C backend
 	tar xvf backend/ffmpeg/ffmpeg-release-armhf-static.tar.xz -C backend

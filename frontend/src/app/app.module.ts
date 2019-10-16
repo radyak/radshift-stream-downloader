@@ -23,6 +23,8 @@ import { FormsModule } from '@angular/forms';
 import { FilesizePipe } from './pipes/filesize.pipe';
 import { StartComponent } from './components/start/start.component';
 import { TimespanPipe } from './pipes/timespan.pipe';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,8 @@ import { TimespanPipe } from './pipes/timespan.pipe';
     MatDividerModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
-    HttpClientModule
+    HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]

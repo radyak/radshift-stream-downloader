@@ -1,26 +1,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
+import { UrlService } from 'src/app/services/url.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DownloadsService {
 
-  private BASE_URL: string = environment.serverUrl;
-
-  constructor(private httpClient: HttpClient) { }
+  constructor(
+    private httpClient: HttpClient,
+    private urlService: UrlService) { }
 
   startDownload(url: string, audioOnly: boolean = false): Observable<any> {
-    return this.httpClient.post<any>(`${this.BASE_URL}/api/downloads`, {
+    return this.httpClient.post<any>(`${ this.urlService.getBaseUrl() }/api/downloads`, {
       url: url,
       audioOnly: audioOnly
     });
   }
 
   getAllDownloads(): Observable<any[]> {
-    return this.httpClient.get<any[]>(`${this.BASE_URL}/api/downloads`);
+    return this.httpClient.get<any[]>(`${ this.urlService.getBaseUrl() }/api/downloads`);
   }
 
 }

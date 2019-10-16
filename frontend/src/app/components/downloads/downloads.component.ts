@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DownloadsService } from 'src/app/services/downloads.service';
 import { WebSocketSubject } from 'rxjs/webSocket';
+import { UrlService } from 'src/app/services/url.service';
+
 
 @Component({
   selector: 'app-downloads',
@@ -13,20 +15,20 @@ export class DownloadsComponent implements OnInit {
   public loading: boolean = false;
   public socket: WebSocketSubject<any>;
 
-  constructor(private downloadsService: DownloadsService) {
-  }
-
-  getBaseUrl(): string {
-    let protocol = location.protocol === 'https' ? 'wss' : 'ws';
-    let host = location.host;
-    return `${protocol}://${host}`
+  constructor(
+    private downloadsService: DownloadsService,
+    private urlService: UrlService) {
   }
 
   ngOnInit() {
     this.loading = true;
     this.update();
 
-    this.socket = new WebSocketSubject(`${this.getBaseUrl()}/api/downloads`);
+    let socketUrl = `${ this.urlService.getWsBaseUrl() }api/downloads`;
+    console.log(`Connecting to ws ${socketUrl}`)
+    this.socket = new WebSocketSubject(socketUrl);
+    console.log(`Connected`)
+
     this.socket.subscribe(event => {
       
       let download = this.downloads.find(download => download.id === event.id);

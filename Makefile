@@ -1,9 +1,9 @@
 #!make
+include ../.env
+export
 
 
 IMAGE=radshift-stream-downloader
-#REPO=radyak
-REPO=rpi-workstation:5000
 
 BASE_IMAGE_ARM32=arm32v7/node:lts-alpine
 BASE_IMAGE_X86=node:lts-alpine

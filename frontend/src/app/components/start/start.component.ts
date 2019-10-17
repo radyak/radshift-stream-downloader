@@ -23,6 +23,10 @@ export class StartComponent implements OnInit {
       if (params.get('url')) {
         this.link = decodeURIComponent(params.get('url'));
       }
+      if (params.get('text')) {
+        this.link = decodeURIComponent(params.get('text'));
+      }
+      console.log(`DEBUG; link=${this.link}`)
       this.audioOnly = params.get('type') === 'audio';
     })
   }

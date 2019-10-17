@@ -49,9 +49,9 @@
     }
   ],
   "share_target": {
-    "url_template": "/apps/radshift-stream-downloader/start?title={title}&text={text}&url={url}&name={name}&description={description}&link={link}",
-    "action": "/apps/radshift-stream-downloader/start",
-    "method": "GET",
+    "url_template": "/apps/radshift-stream-downloader/api/share?title={title}&text={text}&url={url}&name={name}&description={description}&link={link}",
+    "action": "/apps/radshift-stream-downloader/api/share",
+    "method": "POST",
     "enctype": "application/x-www-form-urlencoded",
     "params": {
       "title": "title",

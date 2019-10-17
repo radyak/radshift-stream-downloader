@@ -24,7 +24,7 @@
             </button>
         </div>
         <div class="progress-label" *ngIf="download.status === 'ERROR'">
-            <button mat-raised-button color="warn">
+            <button mat-raised-button color="warn" (click)="removeDownload(download)">
                 Error
                 <mat-icon aria-hidden="false">close</mat-icon>
             </button>

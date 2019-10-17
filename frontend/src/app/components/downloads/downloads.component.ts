@@ -39,6 +39,10 @@ export class DownloadsComponent implements OnInit {
       } else {
         this.update();
       }
+    }, (error) => {
+      this.downloads.forEach(download => {
+        download.status = 'ERROR';
+      })
     })
 
   }

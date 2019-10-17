@@ -13,6 +13,8 @@ export class StartComponent implements OnInit {
   public link: string;
   public loading: boolean = false;
 
+  public DEBUG_PARAMS;
+
   constructor(
     private route: ActivatedRoute,
     private downloadService: DownloadsService,
@@ -20,6 +22,7 @@ export class StartComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParamMap.subscribe(params => {
+      this.DEBUG_PARAMS = JSON.stringify({...params.keys, ...params});
       if (params.get('url')) {
         this.link = decodeURIComponent(params.get('url'));
       }

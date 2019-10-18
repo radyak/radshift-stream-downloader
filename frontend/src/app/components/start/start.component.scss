@@ -46,3 +46,23 @@ label {
 mat-spinner {
     display: inline-block;
 }
+
+.loading-indicator .hint {
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.videoinfo {
+    .title {
+        margin-bottom: 0.5rem;
+    }
+
+    .duration {
+        margin-bottom: 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    img.preview {
+        width: 100%;
+    }
+}

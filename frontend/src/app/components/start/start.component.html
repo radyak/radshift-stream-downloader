@@ -3,12 +3,37 @@
     <section>
         <mat-form-field appearance="outline">
             <mat-label>Paste a video link here</mat-label>
-            <input matInput placeholder="e.g. https://www.youtube.com/watch?v=..." name="link" [(ngModel)]="link">
+            <input matInput placeholder="e.g. https://www.youtube.com/watch?v=..."
+                    name="url"
+                    [ngModel]="url"
+                    (ngModelChange)="setUrl($event)">
             <mat-icon matSuffix>insert_link</mat-icon>
             <mat-hint>
                 For a list of supported video sites click <a href="#">here</a>
             </mat-hint>
         </mat-form-field>
+    </section>
+
+    <section>
+        <div class="loading-indicator" *ngIf="videoInfoLoading">
+            <mat-progress-bar
+                color="primary"
+                mode="indeterminate">
+            </mat-progress-bar>
+            <div class="hint">
+                Loading preview
+            </div>
+        </div>
+
+        <div *ngIf="videoInfo" class="videoinfo">
+            <div class="title">
+                {{ videoInfo.fulltitle }}
+            </div>
+            <div class="duration">
+                [{{ videoInfo.duration }}]
+            </div>
+            <img class="preview" [src]="videoInfo.thumbnail">
+        </div>
     </section>
 
     <section>
@@ -26,7 +51,7 @@
     </section>
 
     <section>
-        <button mat-raised-button color="primary" (click)="startDownload()" [disabled]="loading || !link">
+        <button mat-raised-button color="primary" (click)="startDownload()" [disabled]="loading || !url">
             <span *ngIf="!loading">
                 <mat-icon>play_arrow</mat-icon>
                 Start Download

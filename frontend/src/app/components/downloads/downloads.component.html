@@ -15,7 +15,10 @@
         </div>
         <div class="progress-label" *ngIf="download.status === 'IN_PROGRESS'">
             {{ download.progress.percentage }}%
-            <div class="right">[{{ timeString(download.progress.eta) }}]</div>
+            <div class="right">
+                <mat-icon>timer</mat-icon>
+                {{ timeString(download.progress.eta) }}
+            </div>
         </div>
         <div class="progress-label" *ngIf="download.status === 'FINISHED'">
             <button mat-raised-button color="primary" (click)="removeDownload(download)">

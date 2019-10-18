@@ -109,16 +109,18 @@ const downloadWithMetaData = (url, metadata, options = {}) => {
         intervalPosition = 0
         intervalStart = new Date().getTime()
 
-
         if (size) {
-          var percentage = position / size
-          var eta = (1 - percentage) * size / speed
-          DownloadCache.updateDownload(download.id, {
-            percentage: Math.round(percentage * 100),
-            eta: eta,
-            position: position,
-            speed: speed
-          })
+            var durationInSeconds = (new Date().getTime() - downloadStart) / 1000
+            var percentage = position / size
+
+            var eta = durationInSeconds / percentage - durationInSeconds
+
+            DownloadCache.updateDownload(download.id, {
+                percentage: Math.round(percentage * 100),
+                eta: eta,
+                position: position,
+                speed: speed
+            })
         }
 
     })

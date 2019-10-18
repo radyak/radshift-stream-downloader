@@ -61,7 +61,16 @@ export class DownloadsComponent implements OnInit {
   }
 
   timeString(timeInSeconds: number): string {
-    return timeInSeconds ? Math.round(timeInSeconds) + ' s' : 'unknown'
+    if (!timeInSeconds) {
+      return 'unknown'
+    }
+    timeInSeconds = Math.floor(timeInSeconds)
+    let hours = Math.floor(timeInSeconds / 3600);
+    let remainingSeconds = timeInSeconds % 3600;
+    let minutes = Math.floor(remainingSeconds / 60);
+    let seconds = remainingSeconds % 60;
+
+    return (hours > 0 ? hours + ':' : '') + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
   }
 
 }

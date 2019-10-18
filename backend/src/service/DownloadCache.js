@@ -18,7 +18,7 @@ function publish(download) {
         ...download.progress
     }
     EventsService.emit(EventsService.EVENT_NAME, eventData)
-    console.log('Update: ', eventData)
+    // console.log('Update: ', eventData)
 }
 
 module.exports = {

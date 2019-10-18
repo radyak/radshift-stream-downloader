@@ -1,8 +1,32 @@
 <div class="container">
 
+    <div class="toolbar">
+        <mat-button-toggle-group>
+            <mat-button-toggle value="alpha" aria-label="Sort by name" [checked]="sortBy === 'name'" (change)="setSort('name')">
+                <mat-icon>sort_by_alpha</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle value="date" aria-label="Sort by date" [checked]="sortBy === 'createdAt'" (change)="setSort('createdAt')">
+                <mat-icon>date_range</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle value="size" aria-label="Sort by file size" [checked]="sortBy === 'sizeInBytes'" (change)="setSort('sizeInBytes')">
+                <mat-icon>data_usage</mat-icon>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <mat-button-toggle-group style="float: right">
+            <mat-button-toggle value="music" aria-label="Filter music" [checked]="filterBy === 'music'" (change)="setFilter('music')">
+                <mat-icon>music_note</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle value="video" aria-label="Filter video" [checked]="filterBy === 'video'" (change)="setFilter('video')">
+                <mat-icon>ondemand_video</mat-icon>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+              
+
     <mat-accordion>
 
-        <mat-expansion-panel *ngFor="let file of files">
+        <mat-expansion-panel *ngFor="let file of getStructuredFiles()">
 
             <mat-expansion-panel-header>
                 <mat-panel-title>
@@ -16,6 +40,10 @@
 
             <table>
                 <tr>
+                    <td>Title:</td>
+                    <td>{{ file.name }}</td>
+                </tr>
+                <tr>
                     <td>Size:</td>
                     <td>{{ file.sizeInBytes | filesize }}</td>
                 </tr>
@@ -28,15 +56,12 @@
             <div class="button-row">
                 <button mat-raised-button color="primary" (click)="startStream(file.name)">
                     <mat-icon>play_circle_outline</mat-icon>
-                    Stream
                 </button>
                 <button mat-raised-button color="primary" (click)="download(file.name)">
                     <mat-icon>save_alt</mat-icon>
-                    Download
                 </button>
                 <button mat-raised-button color="warn" (click)="deleteFile(file.name)">
                     <mat-icon>delete</mat-icon>
-                    Delete
                 </button>
             </div>
 

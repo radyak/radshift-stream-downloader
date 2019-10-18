@@ -6,15 +6,14 @@ const router = express.Router()
 router.all('', function (req, res) {
 
     console.log(
-        'Request:', 
+        'Share request:', 
         {
             originalUrl: req.originalUrl,
             headers: req.headers,
             body: req.body
         })
 
-    // res.status(200).send(req.body)
-    res.redirect(`/apps/radshift-stream-downloader/start?url=${req.body.url || req.body.text || 'abc'}`)
+    res.redirect(`/apps/radshift-stream-downloader/start?url=${req.body.url || req.body.text}`)
 
 })
 

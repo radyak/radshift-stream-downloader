@@ -8,5 +8,25 @@
 }
 
 .label {
-    padding: 0.5rem;
+    padding: 0 0.75rem 0 0.5rem;
+    white-space: nowrap;
+}
+
+.toolbar {
+    padding: 1rem;
+    font-size: 1.3rem;
+    color: #fff;
+}
+
+
+.mat-button-toggle-checked {
+
+    // Not possible to access primary color... -_-
+    background: #c2185b;
+
+    color: #fff !important;
+
+    mat-icon {
+        color: #fff !important;
+    }
 }

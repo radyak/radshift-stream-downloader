@@ -10,6 +10,9 @@ import { File } from 'src/app/model/file';
 export class FilesComponent implements OnInit {
 
   public files: File[];
+  public sortBy: string = 'name';
+  public filterBy: string;
+
 
   constructor(private filesService: FilesService) { }
 
@@ -33,4 +36,26 @@ export class FilesComponent implements OnInit {
     });
   }
 
+  setSort(sortBy: string) {
+    this.sortBy = this.sortBy === sortBy ? null : sortBy;
+  }
+
+  setFilter(filterBy: string) {
+    this.filterBy = this.filterBy === filterBy ? null : filterBy;
+  }
+
+  getStructuredFiles(): File[] {
+    let files: File[] = this.files;
+    if (!files) {
+      return [];
+    }
+    if (this.sortBy) {
+      files = files.sort((fileA, fileB) => ('' + fileA[this.sortBy]).localeCompare('' + fileB[this.sortBy]));
+    }
+    if (this.filterBy) {
+      let filterExtensions: string[] = this.filterBy === 'music' ? ['mp3'] : ['mp4']
+      files = files.filter(file => filterExtensions.indexOf(file.extension) !== -1);
+    }
+    return files;
+  }
 }

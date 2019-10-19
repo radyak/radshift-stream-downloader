@@ -56,6 +56,7 @@ export class FilesComponent implements OnInit {
       let filterExtensions: string[] = this.filterBy === 'music' ? ['mp3'] : ['mp4']
       files = files.filter(file => filterExtensions.indexOf(file.extension) !== -1);
     }
+    files.forEach(file => file.name = file.name.replace(/\.mp[34]*/g, ''));
     return files;
   }
 }

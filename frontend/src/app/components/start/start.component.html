@@ -52,11 +52,11 @@
 
     <section>
         <button mat-raised-button color="primary" (click)="startDownload()" [disabled]="loading || !url">
-            <span *ngIf="!loading">
+            <span *ngIf="!loading" class="button-content">
                 <mat-icon>play_arrow</mat-icon>
                 Start Download
             </span>
-            <span *ngIf="loading">
+            <span *ngIf="loading" class="button-content">
                 <mat-spinner [diameter]="30" color="accent"></mat-spinner>
                 Loading ...
             </span>

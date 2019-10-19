@@ -33,14 +33,14 @@
                     <mat-icon *ngIf="file.extension === 'mp3'">music_note</mat-icon>
                     <mat-icon *ngIf="file.extension === 'mp4'">ondemand_video</mat-icon>
                     <div class="label">
-                        {{ file.name }}
+                        {{ file.title }}
                     </div>
                 </mat-panel-title>
             </mat-expansion-panel-header>
 
             <table>
                 <tr>
-                    <td>Title:</td>
+                    <td>File name:</td>
                     <td>{{ file.name }}</td>
                 </tr>
                 <tr>

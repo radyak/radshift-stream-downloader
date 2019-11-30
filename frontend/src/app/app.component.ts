@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationStart, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,9 @@ export class AppComponent implements OnInit {
   navLinks: any[];
   activeLinkIndex = -1;
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router, 
+    private route: ActivatedRoute) {
     this.navLinks = [
       {
         label: 'Start',
@@ -27,6 +29,22 @@ export class AppComponent implements OnInit {
         index: 2
       }, 
     ];
+
+
+    this.router.events.subscribe((event: any): void => {
+      if (event instanceof NavigationStart) {
+        event = event as NavigationStart
+        console.log('event.ActivatedRoute:', event)
+
+        this.route.queryParamMap.subscribe(params => {
+          let token = params.get('token');
+          if (token) {
+            console.log(`I received a token: ${token}`)
+          }
+        });
+
+      }
+    });
   }
 
   ngOnInit() {

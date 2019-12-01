@@ -1,11 +1,11 @@
 {
   "name": "StreamNoMoreFam",
   "short_name": "StreamNoMoreFam",
-  "theme_color": "#fff",
-  "background_color": "#c2185b",
+  "theme_color": "#c2185b",
+  "background_color": "#303030",
   "display": "standalone",
-  "scope": "/apps/radshift-stream-downloader",
-  "start_url": "/apps/radshift-stream-downloader/",
+  "scope": "",
+  "start_url": "",
   "icons": [
     {
       "src": "assets/icons/icon-72x72.png",

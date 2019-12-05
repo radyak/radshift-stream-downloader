@@ -13,7 +13,7 @@ router.all('', function (req, res) {
             body: req.body
         })
 
-    res.redirect(`/apps/radshift-stream-downloader/start?url=${req.body.url || req.body.text}`)
+    res.redirect(`/start?url=${req.body.url || req.body.text}`)
 
 })
 

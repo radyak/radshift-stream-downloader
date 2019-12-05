@@ -4,8 +4,8 @@
   "theme_color": "#c2185b",
   "background_color": "#303030",
   "display": "standalone",
-  "scope": "",
-  "start_url": "",
+  "scope": "/",
+  "start_url": "/start",
   "icons": [
     {
       "src": "assets/icons/icon-72x72.png",
@@ -49,8 +49,8 @@
     }
   ],
   "share_target": {
-    "url_template": "/apps/radshift-stream-downloader/api/share?title={title}&text={text}&url={url}&name={name}&description={description}&link={link}",
-    "action": "/apps/radshift-stream-downloader/api/share",
+    "url_template": "/api/share?title={title}&text={text}&url={url}&name={name}&description={description}&link={link}",
+    "action": "/api/share",
     "method": "POST",
     "enctype": "application/x-www-form-urlencoded",
     "params": {

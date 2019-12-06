@@ -10,6 +10,13 @@ app.use(cors({
   origin: 'http://localhost:4200'
 }))
 
+app.use((req, res, next) => {
+  if (process.env.DEBUG) {
+    console.log('Requested', req.method, req.originalUrl)
+  }
+  next()
+})
+
 app.use('/api/info', require('./src/routes/info'))
 app.use('/api/downloads', require('./src/routes/downloads'))
 app.use('/api/files', require('./src/routes/files'))

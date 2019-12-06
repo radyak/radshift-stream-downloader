@@ -13,7 +13,9 @@ router.all('', function (req, res) {
             body: req.body
         })
 
-    res.redirect(`/start?url=${req.body.url || req.body.text}`)
+    let url = req.body && req.body.url ? req.body.url : ''
+    let text = req.body && req.body.text ? req.body.text : ''
+    res.redirect(`/start?url=${url || text}`)
 
 })
 

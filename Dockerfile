@@ -33,7 +33,7 @@ COPY ./backend/package*.json ./
 RUN npm install --only=production
 COPY ./backend/${FFMPEG} ${FFMPEG}
 COPY ./backend .
-COPY --from=frontend-build /usr/src/frontend /usr/src/frontend
+COPY --from=frontend-build /usr/src/frontend/dist/frontend /usr/src/frontend/dist/frontend
 
 RUN mkdir -p /usr/src/app/output
 

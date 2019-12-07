@@ -49,9 +49,9 @@
     }
   ],
   "share_target": {
-    "url_template": "/api/share?title={title}&text={text}&url={url}&name={name}&description={description}&link={link}",
-    "action": "/api/share",
-    "method": "POST",
+    "url_template": "/start?title={title}&text={text}&url={url}&name={name}&description={description}&link={link}",
+    "action": "/start",
+    "method": "GET",
     "enctype": "application/x-www-form-urlencoded",
     "params": {
       "title": "title",

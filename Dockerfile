@@ -22,9 +22,7 @@ ARG FFMPEG
 
 RUN apk add --update \
     python \
-    python-dev \
     py-pip \
-    build-base \
   && pip install virtualenv \
   && rm -rf /var/cache/apk/*
 
@@ -32,7 +30,10 @@ WORKDIR /usr/src/app
 COPY ./backend/package*.json ./
 RUN npm install --only=production
 COPY ./backend/${FFMPEG} ${FFMPEG}
-COPY ./backend .
+
+COPY ./backend/src src
+COPY ./backend/index.js .
+
 COPY --from=frontend-build /usr/src/frontend/dist/frontend /usr/src/frontend/dist/frontend
 
 RUN mkdir -p /usr/src/app/output

@@ -34,13 +34,10 @@ export class AppComponent implements OnInit {
     this.router.events.subscribe((event: any): void => {
       if (event instanceof NavigationStart) {
         event = event as NavigationStart
-        console.log('event.ActivatedRoute:', event)
 
         this.route.queryParamMap.subscribe(params => {
           let token = params.get('token');
-          if (token) {
-            console.log(`I received a token: ${token}`)
-          }
+          // TODO: Store / process token?
         });
 
       }

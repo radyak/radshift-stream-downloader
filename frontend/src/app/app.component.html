@@ -4,9 +4,12 @@
     StreamNoMoreFam
   </span>
 
-  <!-- This fills the remaining space of the current row -->
-  <!-- <span class="fill"></span>
-  <span>Right Aligned Text</span> -->
+  <span class="fill"></span>
+
+  <span *ngIf="username">
+    <mat-icon>account_box</mat-icon>
+    {{ username }}
+  </span>
 
 </mat-toolbar>
 

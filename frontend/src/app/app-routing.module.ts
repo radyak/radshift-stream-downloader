@@ -6,10 +6,10 @@ import { StartComponent } from './components/start/start.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/start', pathMatch: 'full' },
   { path: 'start', component:  StartComponent},
   { path: 'downloads', component:  DownloadsComponent},
   { path: 'files', component: FilesComponent},
+  { path: '**', redirectTo: '/start', pathMatch: 'full' },
 ];
 
 @NgModule({

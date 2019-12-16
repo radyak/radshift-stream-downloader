@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationStart, ActivatedRoute } from '@angular/router';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -10,10 +11,13 @@ export class AppComponent implements OnInit {
 
   navLinks: any[];
   activeLinkIndex = -1;
+  username: string;
 
   constructor(
     private router: Router, 
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private authService: AuthService
+  ) {
     this.navLinks = [
       {
         label: 'Start',
@@ -47,6 +51,10 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.router.events.subscribe((res) => {
       this.activeLinkIndex = this.navLinks.indexOf(this.navLinks.find(tab => tab.link === '.' + this.router.url));
+    });
+
+    this.authService.getAuth().subscribe(auth => {
+      this.username = auth.username ? auth.username : ''
     });
   }
 

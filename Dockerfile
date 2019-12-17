@@ -1,9 +1,8 @@
 ARG BASE_IMAGE
 
 
-
 ## Frontend
-FROM node:10 AS frontend-build
+FROM ${BASE_IMAGE} AS frontend-build
 
 WORKDIR /usr/src/frontend
 

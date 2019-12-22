@@ -15,7 +15,13 @@
     </section>
 
     <section>
-        <div class="loading-indicator" *ngIf="videoInfoLoading">
+        <div *ngIf="!videoInfo && !videoInfoLoading" class="no-videoinfo">
+            <div class="hint">
+                No preview available
+            </div>
+        </div>
+
+        <div *ngIf="videoInfoLoading" class="loading-indicator">
             <mat-progress-bar
                 color="primary"
                 mode="indeterminate">

@@ -1,31 +1,50 @@
-/* You can add global styles to this file, and also import other style files */
-@import '@angular/material/prebuilt-themes/pink-bluegrey.css';
+@import "@angular/material/prebuilt-themes/pink-bluegrey.css";
 
-html, body {
-    height: 100%;
+@font-face {
+  font-family: Brand;
+  src: url(assets/fonts/OpenSans/OpenSans-Light.ttf) format("truetype");
+}
+
+html,
+body {
+  height: 100%;
+  color: #fff;
 }
 
 body {
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-    background: #303030;
+  margin: 0;
+  background: #303030;
+}
+
+*:not(.mat-icon) {
+  font-family: "Brand", "arial", sans-serif !important;
+}
+
+a {
+    color: #c2185b;
+}
+
+.container {
+  margin: auto;
+  max-width: 600px;
+  padding: 30px;
 }
 
 mat-icon,
 input {
-    color: #fff;
+  color: #fff;
 
-    :disabled & {
-        color: rgba(255,255,255,.3);
-    }
+  :disabled & {
+    color: rgba(255, 255, 255, 0.3);
+  }
 }
 
 .mat-progress-bar-buffer {
-    background-color: rgba($color: #fff, $alpha: 0.67);
+  background-color: rgba($color: #fff, $alpha: 0.67);
 }
 .mat-progress-bar-background {
-    display: none;
+  display: none;
 }
 .mat-icon {
-    vertical-align: middle;
+  vertical-align: middle;
 }

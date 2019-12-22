@@ -2,7 +2,7 @@ const bodyParser = require('body-parser')
 const express = require('express')
 const cors = require('cors')
 const app = express()
-const authRequired = require('./src/middleware/auth-required.middleware')
+const authRequired = require('./src/middleware/request-user.middleware')
 
 require('express-ws')(app)
 

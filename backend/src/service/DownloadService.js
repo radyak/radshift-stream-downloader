@@ -3,12 +3,12 @@ const FileStorageService = require('./FileStorageService')
 const DownloadCache = require('./DownloadCache')
 
 
-const getBestOption = (url, options) => {
+const getBestOption = (url, audioOnly) => {
 
     return YoutubeDlWrapper.getInfo(url)
         .then(info => {
 
-            let bestOption = filterBestOption(info.formats, options.audioOnly);
+            let bestOption = filterBestOption(info.formats, audioOnly);
 
             var metadata = {
                 // youtube-dl metadata
@@ -72,13 +72,13 @@ const filterBestOption = (options, isForAudioDownload) => {
 }
 
 
-const downloadWithMetaData = (url, metadata, options = {}) => {
+const downloadWithMetaData = (url, metadata, audioOnly, username = 'shared') => {
 
     console.log(`Downloading from ${url}`)
 
     var downloadStream = YoutubeDlWrapper.download(url, metadata.format_id)
 
-    let download = DownloadCache.addDownload(metadata, options.audioOnly)
+    let download = DownloadCache.addDownload(metadata, audioOnly)
 
     var size = download.metadata.size
     var targetFile = download.targetFile
@@ -133,7 +133,7 @@ const downloadWithMetaData = (url, metadata, options = {}) => {
         DownloadCache.downloadError(download.id)
     });
     
-    FileStorageService.storeAs(downloadStream, targetFile).then(finalFile => {
+    FileStorageService.storeAs(downloadStream, targetFile, audioOnly, username).then(finalFile => {
 
         var downloadEnd = new Date().getTime()
         var data = {
@@ -151,10 +151,10 @@ const downloadWithMetaData = (url, metadata, options = {}) => {
 
 module.exports = {
 
-    startDownload: (url, options) => {
-        return getBestOption(url, options)
+    startDownload: (url, audioOnly, username = 'shared') => {
+        return getBestOption(url, audioOnly)
             .then(metadata => {
-                return downloadWithMetaData(url, metadata, options)
+                return downloadWithMetaData(url, metadata, audioOnly, username)
             })
             .catch(err => {
                 console.error('An error occurred', err)

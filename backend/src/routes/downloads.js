@@ -28,9 +28,8 @@ router.post('', function (req, res) {
         return
     }
 
-    DownloadService.startDownload(url, {
-        audioOnly: audioOnly
-    }).then(download => {
+    DownloadService.startDownload(url, audioOnly, req.user)
+    .then(download => {
         res.status(202).send(download)
     })
 

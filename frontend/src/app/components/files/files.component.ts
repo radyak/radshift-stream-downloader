@@ -11,13 +11,13 @@ export class FilesComponent implements OnInit {
 
   public files: File[];
   public sortBy: string = 'name';
-  public filterBy: string;
+  public mediaType: string = 'audio';
 
 
   constructor(private filesService: FilesService) { }
 
   ngOnInit() {
-    this.filesService.getFiles().subscribe(data => {
+    this.filesService.getFiles(this.mediaType).subscribe(data => {
       this.files = data
     });
   }
@@ -40,8 +40,11 @@ export class FilesComponent implements OnInit {
     this.sortBy = this.sortBy === sortBy ? null : sortBy;
   }
 
-  setFilter(filterBy: string) {
-    this.filterBy = this.filterBy === filterBy ? null : filterBy;
+  setFilter(mediaType: string) {
+    this.mediaType = this.mediaType === mediaType ? null : mediaType;
+    this.filesService.getFiles(this.mediaType).subscribe(data => {
+      this.files = data
+    });
   }
 
   getStructuredFiles(): File[] {
@@ -51,10 +54,6 @@ export class FilesComponent implements OnInit {
     }
     if (this.sortBy) {
       files = files.sort((fileA, fileB) => ('' + fileA[this.sortBy]).localeCompare('' + fileB[this.sortBy]));
-    }
-    if (this.filterBy) {
-      let filterExtensions: string[] = this.filterBy === 'music' ? ['mp3'] : ['mp4']
-      files = files.filter(file => filterExtensions.indexOf(file.extension) !== -1);
     }
     files.forEach(file => file.title = file.name.replace(/\.mp[34]*/g, ''));
     return files;

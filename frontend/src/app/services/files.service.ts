@@ -13,8 +13,8 @@ export class FilesService {
     private httpClient: HttpClient,
     private urlService: UrlService) { }
 
-  public getFiles(): Observable<File[]> {
-    return this.httpClient.get<File[]>(this.urlService.getUrlForPath(`/api/files`));
+  public getFiles(mediaType: string = 'audio'): Observable<File[]> {
+    return this.httpClient.get<File[]>(this.urlService.getUrlForPath(`/api/files/${mediaType}`));
   }
 
   public getFile(filename: string): void {

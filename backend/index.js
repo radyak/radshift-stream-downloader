@@ -2,6 +2,7 @@ const bodyParser = require('body-parser')
 const express = require('express')
 const cors = require('cors')
 const app = express()
+const authRequired = require('./src/middleware/auth-required.middleware')
 
 require('express-ws')(app)
 
@@ -17,10 +18,12 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use('/api/info', require('./src/routes/info'))
-app.use('/api/downloads', require('./src/routes/downloads'))
-app.use('/api/files', require('./src/routes/files'))
-app.use('/api/streams', require('./src/routes/streams'))
+app.use('/api/info', authRequired, require('./src/routes/info'))
+app.use('/api/downloads', authRequired, require('./src/routes/downloads'))
+app.use('/api/files', authRequired, require('./src/routes/files'))
+app.use('/api/streams', authRequired, require('./src/routes/streams'))
+
+// Must be public - resource will redirect to a client page which handles token transmission 
 app.use('/api/share', bodyParser.urlencoded({ extended: true }), require('./src/routes/share'))
 
 app.get('*.*', express.static('/usr/src/frontend/dist/frontend'))

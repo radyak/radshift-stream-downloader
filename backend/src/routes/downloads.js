@@ -47,11 +47,14 @@ router.ws('', function (ws, req) {
 
     let open = true
 
-    EventsService.on(EventsService.EVENT_NAME, event => {
+    let defaultEventHandler = (event) => {
         if (open) {
             ws.send(JSON.stringify(event))
         }
-    })
+    }
+
+
+    EventsService.on(EventsService.EVENT_NAME, defaultEventHandler)
 
     ws.on('error', (error) => {
         open = false
@@ -59,6 +62,7 @@ router.ws('', function (ws, req) {
 
     ws.on('close', (event) => {
         open = false
+        EventsService.remove(EventsService.EVENT_NAME, defaultEventHandler)
     })
 
 })

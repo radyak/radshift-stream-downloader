@@ -18,10 +18,9 @@ router.get('/supported-sites', (req, res) => {
 
 router.get('/auth', (req, res) => {
     res.status(200)
-       .json({
-           username: req.header('X-User')
-       })
-       .send()
+       .send({
+        username: req.header('X-User')
+    })
 })
 
 

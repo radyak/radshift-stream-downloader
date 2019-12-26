@@ -12,6 +12,10 @@ module.exports = {
 
     emit: (eventName, eventData) => {
         eventEmitter.emit(eventName, eventData)
-    }
+    },
+
+    remove: (eventName, eventCallback) => {
+        eventEmitter.removeListener(eventName, eventCallback)
+    },
 
 }

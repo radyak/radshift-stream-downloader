@@ -101,6 +101,10 @@ module.exports = {
                     })
                     console.log('Processing finished !');
                 })
+                .on('error', function(error) {
+                    console.error('An error occurred while persisting video data:', error)
+                    reject(error)
+                })
 
         })
 

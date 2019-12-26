@@ -133,16 +133,21 @@ const downloadWithMetaData = (url, metadata, audioOnly, username = 'shared') => 
         DownloadCache.downloadError(download.id)
     });
     
-    FileStorageService.storeAs(downloadStream, targetFile, audioOnly, username).then(finalFile => {
+    FileStorageService.storeAs(downloadStream, targetFile, audioOnly, username)
+        .then(finalFile => {
 
-        var downloadEnd = new Date().getTime()
-        var data = {
-            filename: finalFile,
-            end: downloadEnd,
-            duration: `${ (downloadEnd - downloadStart) / 1000 }s`
-        }
-        DownloadCache.finishDownload(download.id, data)
-    })
+            var downloadEnd = new Date().getTime()
+            var data = {
+                filename: finalFile,
+                end: downloadEnd,
+                duration: `${ (downloadEnd - downloadStart) / 1000 }s`
+            }
+            DownloadCache.finishDownload(download.id, data)
+        })
+        .catch(error => {
+            console.error(`Error while saving file ${targetFile}:`, error)
+            DownloadCache.downloadError(download.id)
+        })
 
     return download
 

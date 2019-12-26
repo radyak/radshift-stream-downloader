@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DownloadsService } from 'src/app/services/downloads.service';
 import { WebSocketSubject } from 'rxjs/webSocket';
 import { UrlService } from 'src/app/services/url.service';
+import { timer, Subscription } from 'rxjs';
 
 
 @Component({
@@ -14,6 +15,8 @@ export class DownloadsComponent implements OnInit {
   public downloads: any[] = [];
   public loading: boolean = false;
   public socket: WebSocketSubject<any>;
+  private socketSubscription: Subscription;
+  private wsConnectRetryCount: number = 0;
 
   constructor(
     private downloadsService: DownloadsService,
@@ -27,7 +30,7 @@ export class DownloadsComponent implements OnInit {
     let socketUrl = this.urlService.getWsUrlForPath('/api/downloads');
     this.socket = new WebSocketSubject(socketUrl);
 
-    this.socket.subscribe(event => {
+    this.socketSubscription = this.socket.subscribe(event => {
       
       let download = this.downloads.find(download => download.id === event.id);
 
@@ -40,9 +43,19 @@ export class DownloadsComponent implements OnInit {
         this.update();
       }
     }, (error) => {
-      this.downloads.forEach(download => {
-        download.status = 'ERROR';
-      })
+      if (error instanceof CloseEvent && this.wsConnectRetryCount <= 3) {
+        this.socketSubscription.unsubscribe();
+        this.socket.unsubscribe();
+        this.downloads.forEach(download => {
+          download.status = 'RECONNECTING';
+        })
+        this.wsConnectRetryCount++;
+        timer(2000).subscribe(() => this.ngOnInit.apply(this));
+      } else {
+        this.downloads.forEach(download => {
+          download.status = 'ERROR';
+        })
+      }
     })
 
   }

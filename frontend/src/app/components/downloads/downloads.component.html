@@ -32,6 +32,11 @@
                 <mat-icon aria-hidden="false">close</mat-icon>
             </button>
         </div>
+        <div class="progress-label" *ngIf="download.status === 'RECONNECTING'">
+            <button mat-raised-button color="info" disabled>
+                Reconnecting
+            </button>
+        </div>
         <div class="progress-label" *ngIf="download.status === 'COMPLETE_CONVERTING'">
             Download complete. Converting ...
         </div>

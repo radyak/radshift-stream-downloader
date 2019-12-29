@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FilesService } from 'src/app/services/files.service';
 import { File } from 'src/app/model/file';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-files',
@@ -14,7 +15,9 @@ export class FilesComponent implements OnInit {
   public mediaType: string = 'audio';
 
 
-  constructor(private filesService: FilesService) { }
+  constructor(
+    private router: Router,
+    private filesService: FilesService) { }
 
   ngOnInit() {
     this.filesService.getFiles(this.mediaType).subscribe(data => {
@@ -27,7 +30,8 @@ export class FilesComponent implements OnInit {
   }
 
   startStream(file: string): void {
-    this.filesService.startStream(file);
+    this.router.navigate(['/stream', file]);
+    // this.filesService.startStream(file);
   }
 
   deleteFile(file: string): void {

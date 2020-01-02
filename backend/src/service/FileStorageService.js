@@ -29,7 +29,7 @@ let getFilePath = (filename, username) => {
 let getStoragePath = (isAudio, username) => {
     let mediaSubpath = isAudio ? 'audio' : 'video'
     let userSubpath = username || 'shared'
-    let storagePath = `${basePath}/${userSubpath}/media/${mediaSubpath}/downloads`
+    let storagePath = `${basePath}/${userSubpath}/files/media/${mediaSubpath}/downloads`
     return storagePath
 }
 

@@ -17,7 +17,7 @@ RUN npm run build-prod
 ## Backend
 FROM ${BASE_IMAGE} AS runtime
 
-ARG FFMPEG
+RUN apk add --no-cache ffmpeg
 
 RUN apk add --update \
     python \
@@ -28,7 +28,6 @@ RUN apk add --update \
 WORKDIR /usr/src/app
 COPY ./backend/package*.json ./
 RUN npm install --only=production
-COPY ./backend/${FFMPEG} ${FFMPEG}
 
 COPY ./backend/src src
 COPY ./backend/index.js .
@@ -38,6 +37,6 @@ COPY --from=frontend-build /usr/src/frontend/dist/frontend /usr/src/frontend/dis
 RUN mkdir -p /usr/src/app/output
 
 ENV OUTPUT_PATH /usr/src/app/output
-ENV FFMPEG_PATH /usr/src/app/${FFMPEG}/ffmpeg
+ENV FFMPEG_PATH /usr/bin/ffmpeg
 
 CMD [ "npm", "start" ]

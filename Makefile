@@ -8,9 +8,6 @@ IMAGE=radshift-stream-downloader
 BASE_IMAGE_ARM32=arm32v7/node:lts-alpine
 BASE_IMAGE_X86=node:lts-alpine
 
-FFMPEG_ARM32=ffmpeg-4.2.2-armhf-static
-FFMPEG_X86=ffmpeg-4.1.3-i686-static
-
 TAG=latest
 TAG_X86=x86-latest
 
@@ -22,7 +19,7 @@ default:
 ## arm32
 
 build.arm32: prepare setup
-	docker build -t $(REPO)/$(IMAGE):$(TAG) --build-arg FFMPEG=$(FFMPEG_ARM32) --build-arg BASE_IMAGE=$(BASE_IMAGE_ARM32) .
+	docker build -t $(REPO)/$(IMAGE):$(TAG) --build-arg BASE_IMAGE=$(BASE_IMAGE_ARM32) .
 
 deploy.arm32: build.arm32
 	docker tag  $(REPO)/$(IMAGE):$(TAG) $(REPO)/$(IMAGE):$(TAG)
@@ -32,7 +29,7 @@ deploy.arm32: build.arm32
 ## x86
 
 build.x86: prepare setup clean
-	docker build -t $(REPO)/$(IMAGE):$(TAG_X86) --build-arg FFMPEG=$(FFMPEG_X86) --build-arg BASE_IMAGE=$(BASE_IMAGE_X86) .
+	docker build -t $(REPO)/$(IMAGE):$(TAG_X86) --build-arg BASE_IMAGE=$(BASE_IMAGE_X86) .
 
 deploy.x86: build.x86
 	docker tag  $(REPO)/$(IMAGE):$(TAG_X86) $(REPO)/$(IMAGE):$(TAG_X86)

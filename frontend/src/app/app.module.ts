@@ -16,7 +16,6 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatVideoModule } from 'mat-video';
 import { DownloadsComponent } from './components/downloads/downloads.component';
 import { FilesComponent } from './components/files/files.component';
 import { FormsModule } from '@angular/forms';
@@ -55,7 +54,6 @@ import { StreamComponent } from './components/stream/stream.component';
     MatDividerModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
-    MatVideoModule,
     HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],

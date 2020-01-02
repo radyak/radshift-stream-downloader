@@ -18,7 +18,7 @@ default:
 
 ## arm32
 
-build.arm32: prepare setup
+build.arm32: prepare
 	docker build -t $(REPO)/$(IMAGE):$(TAG) --build-arg BASE_IMAGE=$(BASE_IMAGE_ARM32) .
 
 deploy.arm32: build.arm32
@@ -28,7 +28,7 @@ deploy.arm32: build.arm32
 
 ## x86
 
-build.x86: prepare setup clean
+build.x86: prepare clean
 	docker build -t $(REPO)/$(IMAGE):$(TAG_X86) --build-arg BASE_IMAGE=$(BASE_IMAGE_X86) .
 
 deploy.x86: build.x86
@@ -39,7 +39,7 @@ run.x86: build.x86
 	docker run -p 3009:3009 -e PORT=3009 --name radshift-stream-downloader $(REPO)/$(IMAGE):$(TAG_X86)
 
 clean:
-	docker rm radshift-stream-downloader
+	docker rm radshift-stream-downloader || true
 
 
 ## dev
@@ -54,10 +54,6 @@ run.dev.frontend:
 ## common
 
 deploy.all: deploy.arm32 deploy.x86
-
-setup:
-	tar xvf backend/ffmpeg/ffmpeg-release-i686-static.tar.xz -C backend
-	tar xvf backend/ffmpeg/ffmpeg-release-armhf-static.tar.xz -C backend
 
 prepare:
 	git pull

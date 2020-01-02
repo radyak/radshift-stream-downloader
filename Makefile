@@ -8,7 +8,7 @@ IMAGE=radshift-stream-downloader
 BASE_IMAGE_ARM32=arm32v7/node:lts-alpine
 BASE_IMAGE_X86=node:lts-alpine
 
-FFMPEG_ARM32=ffmpeg-4.1.3-armhf-static
+FFMPEG_ARM32=ffmpeg-4.2.2-armhf-static
 FFMPEG_X86=ffmpeg-4.1.3-i686-static
 
 TAG=latest

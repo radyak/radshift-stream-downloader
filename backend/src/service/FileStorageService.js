@@ -90,14 +90,18 @@ module.exports = {
                     console.error(stderr)
                 })
                 .on('end', function() {
-                    fs.rename(tempFile, path.join(storagePath, fileName), (err) => {
+                    var finalFilePath = path.join(storagePath, fileName)
+                    fs.rename(tempFile, finalFilePath, (err) => {
                         if(err) {
                             console.error(`Could not rename ${tempFile} to ${fileName}`)
                             reject(err)
                             return
                         }
                         console.log(`File saved as ${fileName}`)
-                        resolve(fileName)
+                        resolve({
+                            name: fileName,
+                            fullpath: finalFilePath
+                        })
                     })
                     console.log('Processing finished !');
                 })

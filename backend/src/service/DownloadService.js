@@ -2,7 +2,7 @@ const YoutubeDlWrapper = require('./YoutubeDlWrapper')
 const FileStorageService = require('./FileStorageService')
 const DownloadCache = require('./DownloadCache')
 const NodeID3 = require('node-id3')
-const requestImage = require('request').defaults({ encoding: null })
+const request = require('request')
 
 const getBestOption = (url, audioOnly) => {
 
@@ -145,52 +145,38 @@ const downloadWithMetaData = (url, metadata, audioOnly, username = 'shared') => 
             }
             DownloadCache.finishDownload(download.id, data)
 
-            metadata.filename = storedFile.fullpath
-            return metadata
+            return storedFile.fullpath
         })
         .catch(error => {
             console.error(`Error while saving file ${targetFile}:`, error)
             DownloadCache.downloadError(download.id)
         })
 
-        .then(metadata => {
+        .then(filePath => {
 
-            const requestPromise = new Promise((res, rej) => {
-                requestImage.get(metadata.thumbnail, (err, resp, buffer) => {
-                    if (err) {
-                        rej(err)
-                    }
-                    res(buffer)
-                })
-            })
-
-            return Promise.all([
-                metadata,
-                requestPromise
-            ])
-        })
-
-        .then(values => {
-            const metadata = values[0]
-            const imageBuffer = values[1]
-
-            let tags = {
-                title: metadata.alt_title || metadata.track || metadata.fulltitle,
-                artist: metadata.artist,
-                album: metadata.album,
-                image: {
-                    mime: "",
-                    imageBuffer: imageBuffer,
-                    type: {
-                        id: 3,
-                        name: "front cover"
-                    }
-                }
+            if (!audioOnly) {
+                // Exit; no tags for videos
+                return
             }
 
-            let success = NodeID3.write(tags, metadata.filename)
-            
-            console.log(success ? 'File tagged' : 'Could not tag file')
+            request.defaults({ encoding: null })
+                   .get(metadata.thumbnail, (err, res, buffer) => {
+                        if (err) {
+                            console.error('Could not fetch image as buffer')
+                        }
+                        let tags = {
+                            title: metadata.alt_title || metadata.track || metadata.fulltitle,
+                            artist: metadata.artist,
+                            album: metadata.album,
+                            image: {
+                                imageBuffer: buffer
+                            }
+                        }
+
+                        let success = NodeID3.write(tags, filePath)
+                        
+                        console.log(success ? 'File tagged' : 'Could not tag file')
+                    })
         })
 
     return download

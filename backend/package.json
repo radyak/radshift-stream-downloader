@@ -6,7 +6,7 @@
   "scripts": {
     "test": "node test.js",
     "start": "node index.js",
-    "watch": "PORT=3009 FFMPEG_PATH=./ffmpeg-4.2.2-i686-static/ffmpeg nodemon ./index.js localhost"
+    "watch": "PORT=3009 FFMPEG_PATH=./ffmpeg-i686-static/ffmpeg nodemon ./index.js localhost"
   },
   "author": "",
   "license": "ISC",

@@ -27,14 +27,16 @@ router.get('/:filename', (req, res) => {
 })
 
 router.delete('/:filename', (req, res) => {
-    const deletedFilepath = FileStorageService.deleteFile(req.params.filename, req.user)
+    const filename = req.params.filename
+    const deletedFilepath = FileStorageService.deleteFile(filename, req.user)
 
     if (!deletedFilepath) {
         console.log('Cannot DELETE', filename)
         res.status(404).send()
     }
 
-    res.status(200).send(FileStorageService.getFiles())
+    const isAudio = filename.endsWith('.mp3')
+    res.status(200).send(FileStorageService.getFiles(isAudio, req.user))
 })
 
 

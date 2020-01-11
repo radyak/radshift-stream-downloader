@@ -6,7 +6,7 @@ const path = require('path')
 const rootPath = process.cwd()
 // Should be the users' /home dir on the host (usually /var/rs-root/home)
 const basePath = process.env.OUTPUT_PATH || path.join(rootPath, 'output')
-const ffmpegPath = process.env.FFMPEG_PATH || path.join(rootPath, 'ffmpeg-4.1.3-i686-static', 'ffmpeg')
+const ffmpegPath = process.env.FFMPEG_PATH
 
 
 

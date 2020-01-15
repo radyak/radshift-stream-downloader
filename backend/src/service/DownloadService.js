@@ -4,8 +4,6 @@ const DownloadCache = require('./DownloadCache')
 const NodeID3 = require('node-id3')
 const request = require('request')
 
-const sortByFilesizeDesc = (fileA, fileB) => fileA.filesize - fileB.filesize
-
 const getBestOption = (url, audioOnly) => {
 
     return YoutubeDlWrapper.getInfo(url)
@@ -59,13 +57,17 @@ const filterBestOption = (options, isForAudioDownload) => {
                 format.format_note === 'tiny'
                 || (format.width === null && format.height === null)
             ))
-            .sort(sortByFilesizeDesc)
+
+            // Sort from small to big filesize
+            .sort((fileA, fileB) => fileA.filesize - fileB.filesize)
     } else {
         // Best Option for Audio: extension 'mp4' and biggest files / best quality
         bestOptions = options
             .filter(format => format.ext === 'mp4')
             .filter(format => format.acodec !== 'none')
-            .sort(sortByFilesizeDesc)
+
+            // Sort from big to small filesize
+            .sort((fileA, fileB) => fileB.filesize - fileA.filesize)
     }
 
     return bestOptions ? bestOptions[0] : null;

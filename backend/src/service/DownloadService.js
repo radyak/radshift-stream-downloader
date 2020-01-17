@@ -7,6 +7,25 @@ const request = require('request')
 
 const resolution = (file) => file.width * file.height
 
+const descendingOrder = (fileA, fileB) => {
+    if (resolution(fileA) && resolution(fileB)) {
+        return resolution(fileB) - resolution(fileA)
+    }
+    if (fileA.size && fileB.size) {
+        return fileB.size - fileA.size
+    }
+    if (fileA.filesize && fileB.filesize) {
+        return fileB.filesize - fileA.filesize
+    }
+    if (fileA.format_note && fileB.format_note) {
+        return parseInt(fileB.format_note) - parseInt(fileA.format_note)
+    }
+    return 0
+}
+
+const ascendingOrder = (fileA, fileB) => {
+    return descendingOrder(fileA, fileB) * (-1)
+}
 
 const getBestOption = (url, audioOnly) => {
 
@@ -29,7 +48,7 @@ const getBestOption = (url, audioOnly) => {
                 duration: info.duration,
                 height: bestOption.height,
                 format_id: bestOption.format_id,
-                size: bestOption.filesize,
+                size: bestOption.filesize || bestOption.size,
                 
                 // content metadata
                 artist: info.artist,
@@ -53,28 +72,27 @@ const filterBestOption = (options, isForAudioDownload) => {
 
     let bestOptions
 
+    console.log('Raw options:', JSON.stringify(options))
+
     if (isForAudioDownload) {
         // Best Option for Audio: format_note 'tiny' and smallest file (quality remains the same anyway)
         bestOptions = options
             .filter(format => format.acodec !== 'none')
-            .filter((format => 
-                format.format_note === 'tiny'
-                || (format.width === null && format.height === null)
-            ))
-
-            // Sort from small to big resolution
-            .sort((fileA, fileB) => resolution(fileA) - resolution(fileB))
+            .filter(format => 
+                format.format_note === 'tiny' || (format.width === null && format.height === null)
+            )
+            .sort(ascendingOrder)
     } else {
         // Best Option for Audio: extension 'mp4' and biggest files / best quality
         bestOptions = options
-            .filter(format => format.ext === 'mp4')
             .filter(format => format.acodec !== 'none')
-
-            // Sort from big to small resolution
-            .sort((fileA, fileB) => resolution(fileB) - resolution(fileA))
+            .filter(format => format.ext === 'mp4')
+            .filter(format => format.format_note !== 'tiny' && parseInt(format.format_note) <= 1080)
+            .sort(descendingOrder)
     }
 
-    console.log("Ordered options:", JSON.stringify(bestOptions))
+    console.log('Best option:', JSON.stringify(bestOptions[0]))
+
     return bestOptions ? bestOptions[0] : null;
 
 }

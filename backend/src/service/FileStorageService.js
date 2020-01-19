@@ -82,33 +82,44 @@ module.exports = {
             var now = new Date().toISOString()
             var tempFile = path.join(storagePath, `download.${now}.${fileName}`)
             
-            // TODO: Use other API calls https://www.npmjs.com/package/fluent-ffmpeg/v/1.7.0
-            ffmpeg({source: fileStream})
-                .setFfmpegPath(ffmpegPath)
-                .saveToFile(tempFile, (stdout, stderr) => {
-                    console.log(stdout)
-                    console.error(stderr)
-                })
-                .on('end', function() {
-                    var finalFilePath = path.join(storagePath, fileName)
-                    fs.rename(tempFile, finalFilePath, (err) => {
-                        if(err) {
-                            console.error(`Could not rename ${tempFile} to ${fileName}`)
-                            reject(err)
-                            return
-                        }
-                        console.log(`File saved as ${fileName}`)
-                        resolve({
-                            name: fileName,
-                            fullpath: finalFilePath
-                        })
+            let onFinish = () => {
+                var finalFilePath = path.join(storagePath, fileName)
+                fs.rename(tempFile, finalFilePath, (err) => {
+                    if(err) {
+                        console.error(`Could not rename ${tempFile} to ${fileName}`)
+                        reject(err)
+                        return
+                    }
+                    console.log(`File saved as ${fileName}`)
+                    resolve({
+                        name: fileName,
+                        fullpath: finalFilePath
                     })
-                    console.log('Processing finished !');
                 })
-                .on('error', function(error) {
-                    console.error('An error occurred while persisting video data:', error)
-                    reject(error)
-                })
+                console.log('Processing finished !');
+            },
+
+            onError = (error) => {
+                console.error('An error occurred while persisting video data:', error)
+                reject(error)
+            }
+
+            if (isAudio) {
+                // TODO: Use other API calls https://www.npmjs.com/package/fluent-ffmpeg/v/1.7.0
+                ffmpeg({source: fileStream})
+                    .setFfmpegPath(ffmpegPath)
+                    .saveToFile(tempFile, (stdout, stderr) => {
+                        console.log(stdout)
+                        console.error(stderr)
+                    })
+                    .on('end', onFinish)
+                    .on('error', onError)
+            } else {
+                fileStream
+                    .pipe(fs.createWriteStream(tempFile))
+                    .on('finish', onFinish)
+                    .on('error', onError)
+            }
 
         })
 

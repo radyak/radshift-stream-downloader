@@ -1,19 +1,9 @@
 const express = require('express')
 const DownloadService = require('../service/DownloadService')
-const YoutubeDlWrapper = require('../service/YoutubeDlWrapper')
+const Downloader = require('../service/Downloader')
 
 
 const router = express.Router()
-
-
-router.get('/supported-sites', (req, res) => {
-    DownloadService.getSupportedStreams()
-        .then(streams => {
-            res.status(200).send({
-                supported: streams
-            })
-        })
-})
 
 
 router.get('/auth', (req, res) => {
@@ -27,9 +17,9 @@ router.get('/auth', (req, res) => {
 router.get('/video', (req, res) => {
     let url = req.query.url
     console.log(`Searching info for ${url}`)
-    YoutubeDlWrapper.getInfo(url)
-        .then(metadata => {
-            res.status(200).send(metadata)
+    Downloader.getInfo(url)
+        .then(info => {
+            res.status(200).send(info)
         })
         .catch(e => {
             console.log(e)

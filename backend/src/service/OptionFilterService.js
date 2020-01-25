@@ -23,33 +23,39 @@ const ascendingOrder = (fileA, fileB) => {
     return descendingOrder(fileA, fileB) * (-1)
 }
 
+const allHaveAttribute = (options, attributeName) => {
+    for (option of options) {
+        if (option[attributeName]) {
+            return false
+        }
+    }
+    return true
+}
+
 const filterBestOption = (options, isForAudioDownload) => {
 
-    let bestOptions
+    let rankedOptions = options
 
     console.log('Raw options:', JSON.stringify(options))
 
     if (isForAudioDownload) {
         // Best Option for Audio: format_note 'tiny' and smallest file (quality remains the same anyway)
-        bestOptions = options
+        rankedOptions = options
             .filter(option => option.acodec !== 'none')
             .filter(option => option.format_note === 'tiny' || (!option.width && !option.height))
             .sort(ascendingOrder)
     } else {
         // Best Option for Audio: extension 'mp4' and biggest files / best quality
-        bestOptions = options
+        rankedOptions = options
             .filter(option => option.acodec !== 'none')
             .filter(option => option.ext === 'mp4')
-            .filter(option => {
-                let format = option.format_note || option.format || option.format_id
-                return format !== 'tiny' && parseInt(format) <= 1080
-            })
+            .filter(option => option.format_note !== 'tiny' && option.format !== 'tiny' && option.format_id !== 'tiny')
             .sort(descendingOrder)
     }
 
-    console.log('Best option:', JSON.stringify(bestOptions[0]))
+    console.log('Best option:', JSON.stringify(rankedOptions[0]))
 
-    return bestOptions ? bestOptions[0] : null;
+    return rankedOptions ? rankedOptions[0] : null;
 
 }
 

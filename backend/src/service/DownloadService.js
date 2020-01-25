@@ -63,6 +63,7 @@ const downloadWithMetaData = (url, metadata, audioOnly, username = 'shared') => 
         intervalStart = new Date().getTime()
     const stepThreshold = 10
 
+
     downloadStream.on('data', function data(chunk) {
 
         ++step

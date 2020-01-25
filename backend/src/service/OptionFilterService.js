@@ -63,6 +63,10 @@ const getBestOption = (videoInfo, audioOnly) => {
 
     let bestOption = filterBestOption(videoInfo.formats, audioOnly);
 
+    if (!bestOption) {
+        return null
+    }
+    
     var metadata = {
         // youtube-dl metadata
         extractor_key: videoInfo.extractor_key,

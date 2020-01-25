@@ -77,11 +77,11 @@ module.exports = {
             fs.mkdirSync(storagePath, { recursive: true });
         }
 
+        var now = new Date().toISOString()
+        var tempFile = path.join(storagePath, `download.${now}.${fileName}`)
+        
         return new Promise((resolve, reject) => {
 
-            var now = new Date().toISOString()
-            var tempFile = path.join(storagePath, `download.${now}.${fileName}`)
-            
             let onFinish = () => {
                 var finalFilePath = path.join(storagePath, fileName)
                 fs.rename(tempFile, finalFilePath, (err) => {
@@ -106,12 +106,9 @@ module.exports = {
 
             if (isAudio) {
                 // TODO: Use other API calls https://www.npmjs.com/package/fluent-ffmpeg/v/1.7.0
-                ffmpeg({source: fileStream})
+                ffmpeg(fileStream)
                     .setFfmpegPath(ffmpegPath)
-                    .saveToFile(tempFile, (stdout, stderr) => {
-                        console.log(stdout)
-                        console.error(stderr)
-                    })
+                    .saveToFile(tempFile)
                     .on('end', onFinish)
                     .on('error', onError)
             } else {

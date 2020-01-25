@@ -85,8 +85,6 @@ module.exports = {
 
         download.status = STATUS_IN_PROGRESS
 
-        console.log(download)
-
         publish(download)
     },
 

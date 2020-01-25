@@ -84,10 +84,6 @@ const downloadWithMetaData = (url, metadata, audioOnly, username = 'shared') => 
 
             return storedFile.fullpath
         })
-        .catch(error => {
-            console.error(`Error while saving file ${targetFile}:`, error)
-            DownloadCache.downloadError(download.id)
-        })
 
         .then(filePath => {
 
@@ -114,6 +110,11 @@ const downloadWithMetaData = (url, metadata, audioOnly, username = 'shared') => 
                         
                         console.log(success ? 'File tagged' : 'Could not tag file')
                     })
+        })
+        
+        .catch(error => {
+            console.error(`Error while saving file ${targetFile}:`, error)
+            DownloadCache.downloadError(download.id)
         })
 
     return download

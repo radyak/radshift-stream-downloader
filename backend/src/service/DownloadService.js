@@ -49,20 +49,15 @@ const downloadWithMetaData = (url, metadata, audioOnly, username = 'shared') => 
 
     console.log(`Downloading from ${url}`)
 
+    let filename = metadata.fulltitle.replace(/[/.]+/g, '-')
+    let extension = audioOnly ? 'mp3' : 'mp4'
+    let targetFile = `${filename}.${extension}`
+    var downloadStart = new Date().getTime()
+    let size = metadata.size || metadata.filesize
+
+
     var downloadStream = YoutubeDlWrapper.download(url, metadata.format_id)
-
-    let download = DownloadCache.addDownload(metadata, audioOnly)
-
-    var size = download.metadata.size
-    var targetFile = download.targetFile
-    var downloadStart = download.progress.start
-    var position = download.progress.position
-
-    var step = 0,
-        intervalPosition = 0,
-        intervalStart = new Date().getTime()
-    const stepThreshold = 10
-
+    let download = DownloadCache.addDownload(metadata, audioOnly, size, targetFile)
 
     downloadStream.on('data', function data(chunk) {
         DownloadCache.updateDownload(download.id, chunk.length)

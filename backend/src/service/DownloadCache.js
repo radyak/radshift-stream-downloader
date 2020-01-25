@@ -41,8 +41,8 @@ module.exports = {
             targetFile: targetFile,
             progress: {
                 start: new Date().getTime(),
-                position: 0,
                 intervalStart: new Date().getTime(),
+                position: 0,
                 intervalPosition: 0,
                 step: 0,
                 percentage: 0,
@@ -77,13 +77,15 @@ module.exports = {
         progress.intervalPosition = 0
         progress.intervalStart = new Date().getTime()
 
-        if (progress.size) {
-            var durationInSeconds = (new Date().getTime() - progress.downloadStart) / 1000
-            progress.percentage = progress.position / progress.size
-            progress.eta = durationInSeconds / percentage - durationInSeconds
+        if (download.size) {
+            var durationInSeconds = (new Date().getTime() - progress.start) / 1000
+            progress.percentage = progress.position / download.size
+            progress.eta = durationInSeconds / progress.percentage - durationInSeconds
         }
 
         download.status = STATUS_IN_PROGRESS
+
+        console.log(download)
 
         publish(download)
     },

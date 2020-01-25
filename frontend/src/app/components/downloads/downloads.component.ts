@@ -37,7 +37,7 @@ export class DownloadsComponent implements OnInit {
       if (download) {
         download.status = event.status;
         download.progress.eta = event.eta;
-        download.progress.percentage = event.percentage;
+        download.progress.percentage = Math.round(event.percentage * 100);
         download.progress.speed = event.speed;
       } else {
         this.update();

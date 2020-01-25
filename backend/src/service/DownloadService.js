@@ -4,96 +4,43 @@ const DownloadCache = require('./DownloadCache')
 const NodeID3 = require('node-id3')
 const request = require('request')
 
+const OptionFilterService = require('./OptionFilterService')
 
-const resolution = (file) => file.width * file.height
 
-const descendingOrder = (fileA, fileB) => {
-    if (resolution(fileA) && resolution(fileB)) {
-        return resolution(fileB) - resolution(fileA)
-    }
-    if (fileA.size && fileB.size) {
-        return fileB.size - fileA.size
-    }
-    if (fileA.filesize && fileB.filesize) {
-        return fileB.filesize - fileA.filesize
-    }
-    if (fileA.format_note && fileB.format_note) {
-        return parseInt(fileB.format_note) - parseInt(fileA.format_note)
-    }
-    return 0
-}
+const getBestOption = (videoInfo, audioOnly) => {
 
-const ascendingOrder = (fileA, fileB) => {
-    return descendingOrder(fileA, fileB) * (-1)
-}
+        let bestOption = OptionFilterService.filterBestOption(videoInfo.formats, audioOnly);
 
-const getBestOption = (url, audioOnly) => {
+        var metadata = {
+            // youtube-dl metadata
+            extractor_key: videoInfo.extractor_key,
+            extractor: videoInfo.extractor,
+            webpage_url: videoInfo.webpage_url,
+            average_rating: videoInfo.average_rating,
+            view_count: videoInfo.view_count,
+            channel_url: videoInfo.channel_url,
+            
+            // file metadata
+            width: bestOption.width,
+            duration: videoInfo.duration,
+            height: bestOption.height,
+            format_id: bestOption.format_id,
+            size: bestOption.filesize || bestOption.size,
+            
+            // content metadata
+            artist: videoInfo.artist,
+            alt_title: videoInfo.alt_title,
+            creator: videoInfo.creator,
+            fulltitle: videoInfo.fulltitle,
+            album: videoInfo.album,
+            description: videoInfo.description,
+            track: videoInfo.track,
+            thumbnail: videoInfo.thumbnail,
+        }
 
-    return YoutubeDlWrapper.getInfo(url)
-        .then(info => {
+        console.log('Best Option Metadata:', metadata)
 
-            let bestOption = filterBestOption(info.formats, audioOnly);
-
-            var metadata = {
-                // youtube-dl metadata
-                extractor_key: info.extractor_key,
-                extractor: info.extractor,
-                webpage_url: info.webpage_url,
-                average_rating: info.average_rating,
-                view_count: info.view_count,
-                channel_url: info.channel_url,
-                
-                // file metadata
-                width: bestOption.width,
-                duration: info.duration,
-                height: bestOption.height,
-                format_id: bestOption.format_id,
-                size: bestOption.filesize || bestOption.size,
-                
-                // content metadata
-                artist: info.artist,
-                alt_title: info.alt_title,
-                creator: info.creator,
-                fulltitle: info.fulltitle,
-                album: info.album,
-                description: info.description,
-                track: info.track,
-                thumbnail: info.thumbnail,
-            }
-
-            console.log('Best Option Metadata:', metadata)
-
-            return metadata
-        })
-
-}
-
-const filterBestOption = (options, isForAudioDownload) => {
-
-    let bestOptions
-
-    console.log('Raw options:', JSON.stringify(options))
-
-    if (isForAudioDownload) {
-        // Best Option for Audio: format_note 'tiny' and smallest file (quality remains the same anyway)
-        bestOptions = options
-            .filter(format => format.acodec !== 'none')
-            .filter(format => 
-                format.format_note === 'tiny' || (format.width === null && format.height === null)
-            )
-            .sort(ascendingOrder)
-    } else {
-        // Best Option for Audio: extension 'mp4' and biggest files / best quality
-        bestOptions = options
-            .filter(format => format.acodec !== 'none')
-            .filter(format => format.ext === 'mp4')
-            .filter(format => format.format_note !== 'tiny' && parseInt(format.format_note) <= 1080)
-            .sort(descendingOrder)
-    }
-
-    console.log('Best option:', JSON.stringify(bestOptions[0]))
-
-    return bestOptions ? bestOptions[0] : null;
+        return metadata
 
 }
 
@@ -212,9 +159,10 @@ const downloadWithMetaData = (url, metadata, audioOnly, username = 'shared') => 
 module.exports = {
 
     startDownload: (url, audioOnly, username = 'shared') => {
-        return getBestOption(url, audioOnly)
-            .then(metadata => {
-                return downloadWithMetaData(url, metadata, audioOnly, username)
+        return YoutubeDlWrapper.getInfo(url)
+            .then((info) => getBestOption(info, audioOnly))
+            .then(bestOption => {
+                return downloadWithMetaData(url, bestOption, audioOnly, username)
             })
             .catch(err => {
                 console.error('An error occurred', err)

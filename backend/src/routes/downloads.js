@@ -16,22 +16,21 @@ const router = express.Router()
 */
 router.post('', function (req, res) {
 
+    const option = req.body.option
     const url = req.body.url
     const audioOnly = !!req.body.audioOnly
 
-    if (!url) {
-        console.log(`Parameter 'url' is missing`)
+    if (!option || !url) {
+        console.log(`URL and/or download option is missing`)
         res.status(400).send({
             'type': `error`,
-            'message': `Parameter 'url' is missing`
+            'message': `URL and/or download option is missing`
         })
         return
     }
 
-    DownloadService.startDownload(url, audioOnly, req.user)
-    .then(download => {
-        res.status(202).send(download)
-    })
+    let download = DownloadService.startDownload(url, option, audioOnly, req.user)
+    res.status(202).send(download)
 
 })
 

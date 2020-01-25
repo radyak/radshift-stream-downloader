@@ -59,6 +59,45 @@ const filterBestOption = (options, isForAudioDownload) => {
 
 }
 
+const getBestOption = (videoInfo, audioOnly) => {
+
+    let bestOption = filterBestOption(videoInfo.formats, audioOnly);
+
+    var metadata = {
+        // youtube-dl metadata
+        extractor_key: videoInfo.extractor_key,
+        extractor: videoInfo.extractor,
+        webpage_url: videoInfo.webpage_url,
+        average_rating: videoInfo.average_rating,
+        view_count: videoInfo.view_count,
+        channel_url: videoInfo.channel_url,
+        
+        // file metadata
+        url: bestOption.url,
+        width: bestOption.width,
+        duration: videoInfo.duration,
+        height: bestOption.height,
+        format_id: bestOption.format_id,
+        size: bestOption.filesize || bestOption.size,
+        
+        // content metadata
+        artist: videoInfo.artist,
+        alt_title: videoInfo.alt_title,
+        creator: videoInfo.creator,
+        fulltitle: videoInfo.fulltitle,
+        album: videoInfo.album,
+        description: videoInfo.description,
+        track: videoInfo.track,
+        thumbnail: videoInfo.thumbnail,
+    }
+
+    console.log('Best Option Metadata:', metadata)
+
+    return metadata
+
+}
+
+
 module.exports = {
-    filterBestOption: filterBestOption
+    getBestOption: getBestOption
 }

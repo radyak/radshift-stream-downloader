@@ -4,50 +4,14 @@ const DownloadCache = require('./DownloadCache')
 const NodeID3 = require('node-id3')
 const request = require('request')
 
-const OptionFilterService = require('./OptionFilterService')
-
-
-const getBestOption = (videoInfo, audioOnly) => {
-
-        let bestOption = OptionFilterService.filterBestOption(videoInfo.formats, audioOnly);
-
-        var metadata = {
-            // youtube-dl metadata
-            extractor_key: videoInfo.extractor_key,
-            extractor: videoInfo.extractor,
-            webpage_url: videoInfo.webpage_url,
-            average_rating: videoInfo.average_rating,
-            view_count: videoInfo.view_count,
-            channel_url: videoInfo.channel_url,
-            
-            // file metadata
-            width: bestOption.width,
-            duration: videoInfo.duration,
-            height: bestOption.height,
-            format_id: bestOption.format_id,
-            size: bestOption.filesize || bestOption.size,
-            
-            // content metadata
-            artist: videoInfo.artist,
-            alt_title: videoInfo.alt_title,
-            creator: videoInfo.creator,
-            fulltitle: videoInfo.fulltitle,
-            album: videoInfo.album,
-            description: videoInfo.description,
-            track: videoInfo.track,
-            thumbnail: videoInfo.thumbnail,
-        }
-
-        console.log('Best Option Metadata:', metadata)
-
-        return metadata
-
-}
-
 
 const downloadWithMetaData = (url, metadata, audioOnly, username = 'shared') => {
+    
+    console.log('url:', url)
+    console.log('metadata:', metadata)
 
-    console.log(`Downloading from ${url}`)
+
+    console.log(`Downloading video ${url} from ${metadata.url}`)
 
     let filename = metadata.fulltitle.replace(/[/.]+/g, '-')
     let extension = audioOnly ? 'mp3' : 'mp4'
@@ -111,7 +75,7 @@ const downloadWithMetaData = (url, metadata, audioOnly, username = 'shared') => 
                         console.log(success ? 'File tagged' : 'Could not tag file')
                     })
         })
-        
+
         .catch(error => {
             console.error(`Error while saving file ${targetFile}:`, error)
             DownloadCache.downloadError(download.id)
@@ -124,15 +88,8 @@ const downloadWithMetaData = (url, metadata, audioOnly, username = 'shared') => 
 
 module.exports = {
 
-    startDownload: (url, audioOnly, username = 'shared') => {
-        return YoutubeDlWrapper.getInfo(url)
-            .then((info) => getBestOption(info, audioOnly))
-            .then(bestOption => {
-                return downloadWithMetaData(url, bestOption, audioOnly, username)
-            })
-            .catch(err => {
-                console.error('An error occurred', err)
-            })
+    startDownload: (url, option, audioOnly, username = 'shared') => {
+        return downloadWithMetaData(url, option, audioOnly, username)
     },
 
     getSupportedStreams: () => {

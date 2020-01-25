@@ -11,6 +11,9 @@ const STATUS_ERROR = `ERROR`
 const STATUS_COMPLETE_CONVERTING = `COMPLETE_CONVERTING`
 const STATUS_FINISHED = `FINISHED`
 
+const STEP_THRESHOLD = 1
+
+
 function publish(download) {
     let eventData = {
         id: download.id,
@@ -23,28 +26,28 @@ function publish(download) {
 
 module.exports = {
 
-    addDownload: (metadata, audioOnly) => {
+    addDownload: (metadata, audioOnly, size, targetFile) => {
         var id = crypto.createHash('md5')
                        .update(new Date().toISOString())
                        .digest('hex')
 
-        var format = audioOnly ? 'mp3' : 'mp4'
-        var filename = metadata.fulltitle.replace(/[/.]+/g, '-');
-        var targetFile = `${filename}.${format}`
 
         var download = {
             id: id,
+            size: size,
             status: STATUS_STARTING,
             audioOnly: audioOnly,
             metadata: metadata,
-            format: format,
             targetFile: targetFile,
             progress: {
                 start: new Date().getTime(),
+                position: 0,
+                intervalStart: new Date().getTime(),
+                intervalPosition: 0,
+                step: 0,
                 percentage: 0,
                 eta: null,
-                position: 0,
-                speed: 0
+                speed: 0,
             }
         }
 
@@ -54,14 +57,33 @@ module.exports = {
         return download
     },
 
-    updateDownload: (id, progress) => {
-        let download = CACHE[id]
-        download.status = STATUS_IN_PROGRESS
+    updateDownload: (id, chunkSize) => {
 
-        download.progress.percentage = progress.percentage
-        download.progress.eta = progress.eta
-        download.progress.position = progress.position
-        download.progress.speed = progress.speed
+        let download = CACHE[id]
+        let progress = download.progress
+
+        ++progress.step
+        progress.intervalPosition += chunkSize
+        progress.position += chunkSize
+        
+        if (progress.step < STEP_THRESHOLD) {
+            return
+        }
+
+        var intervalInSeconds = (new Date().getTime() - progress.intervalStart) / 1000
+        progress.speed = progress.intervalPosition / intervalInSeconds
+
+        progress.step = 0
+        progress.intervalPosition = 0
+        progress.intervalStart = new Date().getTime()
+
+        if (progress.size) {
+            var durationInSeconds = (new Date().getTime() - progress.downloadStart) / 1000
+            progress.percentage = progress.position / progress.size
+            progress.eta = durationInSeconds / percentage - durationInSeconds
+        }
+
+        download.status = STATUS_IN_PROGRESS
 
         publish(download)
     },
@@ -73,13 +95,13 @@ module.exports = {
         publish(download)
     },
 
-    finishDownload: (id, data) => {
+    finishDownload: (id, filename) => {
         let download = CACHE[id]
         download.status = STATUS_FINISHED
         
-        download.progress.end = data.end
-        download.progress.duration = data.duration
-        download.targetFile = data.filename
+        download.progress.end = new Date().getTime()
+        download.progress.duration = `${ (new Date().getTime() - download.progress.start) / 1000 }s`
+        download.targetFile = filename
         download.progress.percentage = 100
         download.progress.eta = 0
         download.progress.position = null

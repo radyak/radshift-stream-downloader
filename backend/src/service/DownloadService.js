@@ -65,38 +65,7 @@ const downloadWithMetaData = (url, metadata, audioOnly, username = 'shared') => 
 
 
     downloadStream.on('data', function data(chunk) {
-
-        ++step
-        intervalPosition += chunk.length
-        position += chunk.length
-        
-
-        if (step < stepThreshold) {
-            return
-        }
-
-        var intervalEnd = new Date().getTime()
-        var intervalInSeconds = (intervalEnd - intervalStart) / 1000
-        var speed = intervalPosition / intervalInSeconds
-
-        step = 0
-        intervalPosition = 0
-        intervalStart = new Date().getTime()
-
-        if (size) {
-            var durationInSeconds = (new Date().getTime() - downloadStart) / 1000
-            var percentage = position / size
-
-            var eta = durationInSeconds / percentage - durationInSeconds
-
-            DownloadCache.updateDownload(download.id, {
-                percentage: Math.round(percentage * 100),
-                eta: eta,
-                position: position,
-                speed: speed
-            })
-        }
-
+        DownloadCache.updateDownload(download.id, chunk.length)
     })
 
     downloadStream.on('complete', function error(err) {

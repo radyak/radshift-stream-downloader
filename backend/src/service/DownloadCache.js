@@ -26,7 +26,7 @@ function publish(download) {
 
 module.exports = {
 
-    addDownload: (metadata, audioOnly, size, targetFile) => {
+    addDownload: (info, audioOnly, size) => {
         var id = crypto.createHash('md5')
                        .update(new Date().toISOString())
                        .digest('hex')
@@ -37,8 +37,7 @@ module.exports = {
             size: size,
             status: STATUS_STARTING,
             audioOnly: audioOnly,
-            metadata: metadata,
-            targetFile: targetFile,
+            metadata: info,
             progress: {
                 start: new Date().getTime(),
                 intervalStart: new Date().getTime(),

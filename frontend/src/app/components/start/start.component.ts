@@ -68,8 +68,7 @@ export class StartComponent implements OnInit {
 
   startDownload(): void {
     this.loading = true;
-    var option = this.audioOnly ? this.videoInfo.audioOption : this.videoInfo.videoOption
-    this.downloadService.startDownload(this.url, option, this.audioOnly)
+    this.downloadService.startDownload(this.url, this.audioOnly)
       .subscribe(download => {
         this.router.navigate(['downloads']);
         this.loading = false;

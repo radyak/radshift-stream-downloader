@@ -1,7 +1,6 @@
 const express = require('express')
 const DownloadService = require('../service/DownloadService')
 const YoutubeDlWrapper = require('../service/YoutubeDlWrapper')
-const OptionFilterService = require('../service/OptionFilterService')
 
 
 const router = express.Router()
@@ -29,12 +28,8 @@ router.get('/video', (req, res) => {
     let url = req.query.url
     console.log(`Searching info for ${url}`)
     YoutubeDlWrapper.getInfo(url)
-        .then(metadata => {
-            res.status(200).send({
-                ...metadata,
-                audioOption: OptionFilterService.getBestOption(metadata, true),
-                videoOption: OptionFilterService.getBestOption(metadata, false)
-            })
+        .then(info => {
+            res.status(200).send(info)
         })
         .catch(e => {
             console.log(e)

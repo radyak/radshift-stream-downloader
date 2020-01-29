@@ -12,10 +12,9 @@ export class DownloadsService {
     private httpClient: HttpClient,
     private urlService: UrlService) { }
 
-  startDownload(url: string, option: any, audioOnly: boolean = false): Observable<any> {
+  startDownload(url: string, audioOnly: boolean = false): Observable<any> {
     return this.httpClient.post<any>(this.urlService.getUrlForPath('/api/downloads'), {
       url: url,
-      option: option,
       audioOnly: audioOnly
     });
   }

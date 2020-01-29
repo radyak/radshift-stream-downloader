@@ -29,10 +29,17 @@ module.exports = {
         })
     },
     
-    download: (url, format_id) => {
+    download: (url, audioOnly) => {
+        let options = []
+        
+        options.push(`--format=${audioOnly ? 'bestaudio' : 'best'}`)
+        if (audioOnly) {
+            options.push(`-x`)
+            options.push(`--audio-format=mp3`)
+        }
         return youtubedl(
             url,
-            [ `--format=${format_id}` ],
+            options,
             { cwd: __dirname }
         )
     }

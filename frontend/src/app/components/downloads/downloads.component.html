@@ -6,7 +6,7 @@
 
     <section *ngFor="let download of downloads">
         <div class="progress-label main">
-            {{ download.targetFile }}
+            {{ download.metadata.fulltitle }}
         </div>
         <mat-progress-bar [value]="download.progress.percentage"></mat-progress-bar>
         

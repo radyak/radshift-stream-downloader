@@ -61,8 +61,6 @@ module.exports = {
         }
         CACHE[id] = download
 
-        console.log(download)
-
         publish(download)
     },
 

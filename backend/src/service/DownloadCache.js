@@ -26,7 +26,7 @@ function publish(download) {
 
 module.exports = {
 
-    addDownload: (info, audioOnly, size) => {
+    addDownload: () => {
         var id = crypto.createHash('md5')
                        .update(new Date().toISOString())
                        .digest('hex')
@@ -34,20 +34,7 @@ module.exports = {
 
         var download = {
             id: id,
-            size: size,
-            status: STATUS_STARTING,
-            audioOnly: audioOnly,
-            metadata: info,
-            progress: {
-                start: new Date().getTime(),
-                intervalStart: new Date().getTime(),
-                position: 0,
-                intervalPosition: 0,
-                step: 0,
-                percentage: 0,
-                eta: null,
-                speed: 0,
-            }
+            status: STATUS_STARTING
         }
 
         CACHE[id] = download
@@ -56,60 +43,61 @@ module.exports = {
         return download
     },
 
-    updateDownload: (id, chunkSize) => {
 
+    /* DOWNLOADING:
+        {
+            status: 'downloading',
+            downloaded_bytes: 3175612,
+            total_bytes: 3175612,
+            tmpfilename: 'CHVRCHES - Miracle (Official Video)-e1YqueG2gtQ.webm.part',
+            filename: 'CHVRCHES - Miracle (Official Video)-e1YqueG2gtQ.webm',
+            eta: 0,
+            speed: 9905427.830759333,
+            elapsed: 0.41184139251708984,
+            _eta_str: '00:00',
+            _percent_str: '100.0%',
+            _speed_str: ' 9.45MiB/s',
+            _total_bytes_str: '3.03MiB'
+        }
+    */
+    updateDownload: (id, data) => {
         let download = CACHE[id]
-        let progress = download.progress
-
-        ++progress.step
-        progress.intervalPosition += chunkSize
-        progress.position += chunkSize
-        
-        if (progress.step < STEP_THRESHOLD) {
-            return
+        download = {
+            ...download,
+            ...data,
+            status: STATUS_IN_PROGRESS
         }
-
-        var intervalInSeconds = (new Date().getTime() - progress.intervalStart) / 1000
-        progress.speed = progress.intervalPosition / intervalInSeconds
-
-        progress.step = 0
-        progress.intervalPosition = 0
-        progress.intervalStart = new Date().getTime()
-
-        if (download.size) {
-            var durationInSeconds = (new Date().getTime() - progress.start) / 1000
-            progress.percentage = progress.position / download.size
-            progress.eta = durationInSeconds / progress.percentage - durationInSeconds
-        }
-
-        download.status = STATUS_IN_PROGRESS
+        CACHE[id] = download
 
         publish(download)
     },
 
-    completedAndConvertingDownload: (id) => {
+
+    /* FINISHED:
+        {
+            filename: 'CHVRCHES - Miracle (Official Video)-e1YqueG2gtQ.webm',
+            status: 'finished',
+            total_bytes: 3175612,
+            _total_bytes_str: '3.03MiB'
+        }
+     */
+    completedAndConvertingDownload: (id, data) => {
         let download = CACHE[id]
         download.status = STATUS_COMPLETE_CONVERTING
 
         publish(download)
     },
 
+    
     finishDownload: (id, filename) => {
         let download = CACHE[id]
         download.status = STATUS_FINISHED
         
-        download.progress.end = new Date().getTime()
-        download.progress.duration = `${ (new Date().getTime() - download.progress.start) / 1000 }s`
-        download.targetFile = filename
-        download.progress.percentage = 100
-        download.progress.eta = 0
-        download.progress.position = null
-        download.progress.speed = 0
-
         publish(download)
 
         delete CACHE[id]
     },
+
 
     downloadError: (id) => {
         let download = CACHE[id]
@@ -118,17 +106,20 @@ module.exports = {
         publish(download)
     },
 
+
     getAllDownloads: () => {
         return Object.values({
             ...CACHE
         })
     },
 
+
     getDownload: (id) => {
         return {
             ...CACHE[id]
         }
     },
+
 
     clearDownloads: () => {
         Object.keys(CACHE).forEach(id => {

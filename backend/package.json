@@ -6,7 +6,7 @@
   "scripts": {
     "test": "node test.js",
     "start": "node index.js",
-    "watch": "PORT=3009 FFMPEG_PATH=./ffmpeg-i686-static/ffmpeg nodemon ./index.js localhost"
+    "watch": "PORT=3009 nodemon ./index.js localhost"
   },
   "author": "",
   "license": "ISC",
@@ -14,11 +14,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-ws": "^4.0.0",
-    "fluent-ffmpeg": "^2.1.2",
-    "mediaserver": "^0.1.1",
-    "node-id3": "^0.1.13",
-    "request": "^2.88.0",
-    "youtube-dl": "^2.3.0"
+    "mediaserver": "^0.1.1"
   },
   "devDependencies": {
     "nodemon": "^1.19.4"

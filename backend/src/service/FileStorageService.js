@@ -1,12 +1,10 @@
 const fs = require('fs')
-const ffmpeg = require('fluent-ffmpeg')
 const path = require('path')
 
 
 const rootPath = process.cwd()
 // Should be the users' /home dir on the host (usually /var/rs-root/home)
 const basePath = process.env.OUTPUT_PATH || path.join(rootPath, 'output')
-const ffmpegPath = process.env.FFMPEG_PATH
 
 
 
@@ -102,20 +100,6 @@ module.exports = {
             onError = (error) => {
                 console.error('An error occurred while persisting video data:', error)
                 reject(error)
-            }
-
-            if (isAudio) {
-                // TODO: Use other API calls https://www.npmjs.com/package/fluent-ffmpeg/v/1.7.0
-                ffmpeg(fileStream)
-                    .setFfmpegPath(ffmpegPath)
-                    .saveToFile(tempFile)
-                    .on('end', onFinish)
-                    .on('error', onError)
-            } else {
-                fileStream
-                    .pipe(fs.createWriteStream(tempFile))
-                    .on('finish', onFinish)
-                    .on('error', onError)
             }
 
         })

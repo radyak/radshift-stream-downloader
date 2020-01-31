@@ -36,9 +36,10 @@ export class DownloadsComponent implements OnInit {
 
       if (download) {
         download.status = event.status;
-        download.progress.eta = event.eta;
-        download.progress.percentage = Math.round(event.percentage * 100);
-        download.progress.speed = event.speed;
+        download.filename = event.filename;
+        download.percentage = event.percentage;
+        download._percent_str = event._percent_str;
+        download._eta_str = event._eta_str;
       } else {
         this.update();
       }
@@ -60,6 +61,10 @@ export class DownloadsComponent implements OnInit {
 
   }
 
+  getPercentage(percentageString) {
+    return parseInt(percentageString) / 100
+  }
+
   update(): void {
     this.downloadsService.getAllDownloads().subscribe((downloads: any[]) => {
       this.loading = false;
@@ -71,19 +76,6 @@ export class DownloadsComponent implements OnInit {
     this.downloads = this.downloads.filter(currDownload => {
       currDownload !== download
     });
-  }
-
-  timeString(timeInSeconds: number): string {
-    if (!timeInSeconds) {
-      return 'unknown'
-    }
-    timeInSeconds = Math.floor(timeInSeconds)
-    let hours = Math.floor(timeInSeconds / 3600);
-    let remainingSeconds = timeInSeconds % 3600;
-    let minutes = Math.floor(remainingSeconds / 60);
-    let seconds = remainingSeconds % 60;
-
-    return (hours > 0 ? hours + ':' : '') + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
   }
 
 }

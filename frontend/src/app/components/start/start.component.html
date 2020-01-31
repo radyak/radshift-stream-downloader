@@ -33,10 +33,10 @@
 
         <div *ngIf="videoInfo" class="videoinfo">
             <div class="title">
-                {{ videoInfo.fulltitle }}
+                {{ videoInfo.title }}
             </div>
             <div class="duration">
-                [{{ videoInfo.duration }}]
+                [{{ getDuration() }}]
             </div>
             <img class="preview" [src]="videoInfo.thumbnail">
         </div>

@@ -74,16 +74,3 @@ module.exports = {
     }
 
 }
-
-// YoutubeDlWrapper.getInfo("https://www.youtube.com/watch?v=6JK5-IyZlDc").then(info => {
-//     console.log("Info:", info)
-// })
-
-// const download = YoutubeDlWrapper.download("https://www.youtube.com/watch?v=6JK5-IyZlDc")
-
-// download.on("downloading", (data) => {
-//     console.log("downloading:", data, "\n\n")
-// })
-// download.on("finished", (data) => {
-//     console.log("finished:", data, "\n\n")
-// })

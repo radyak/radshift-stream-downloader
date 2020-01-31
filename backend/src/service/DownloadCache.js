@@ -11,17 +11,9 @@ const STATUS_ERROR = `ERROR`
 const STATUS_COMPLETE_CONVERTING = `COMPLETE_CONVERTING`
 const STATUS_FINISHED = `FINISHED`
 
-const STEP_THRESHOLD = 1
-
 
 function publish(download) {
-    let eventData = {
-        id: download.id,
-        status: download.status,
-        ...download.progress
-    }
-    EventsService.emit(EventsService.EVENT_NAME, eventData)
-    // console.log('Update: ', eventData)
+    EventsService.emit(EventsService.EVENT_NAME, download)
 }
 
 module.exports = {
@@ -69,6 +61,8 @@ module.exports = {
         }
         CACHE[id] = download
 
+        console.log(download)
+
         publish(download)
     },
 
@@ -89,7 +83,7 @@ module.exports = {
     },
 
     
-    finishDownload: (id, filename) => {
+    finishDownload: (id) => {
         let download = CACHE[id]
         download.status = STATUS_FINISHED
         

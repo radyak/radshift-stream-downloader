@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DownloadsService } from 'src/app/services/downloads.service';
 import { InfoService } from 'src/app/services/info.service';
+import { min } from 'rxjs/operators';
 
 @Component({
   selector: 'app-start',
@@ -64,6 +65,18 @@ export class StartComponent implements OnInit {
         this.videoInfoLoading = false;
       }
     );
+  }
+
+  getDuration(): string {
+    let seconds = this.videoInfo.duration % 60
+    let minutes = Math.floor(this.videoInfo.duration / 60)
+    let hours = Math.floor(minutes / 3600)
+
+    let hoursString = hours < 10 ? `0${hours}` : hours
+    let minutesString = minutes < 10 ? `0${minutes}` : minutes
+    let secondsString = seconds < 10 ? `0${seconds}` : seconds
+
+    return minutes > 20 ? `${hoursString}:${minutesString}:${secondsString}` : `${minutesString}:${secondsString}`
   }
 
   startDownload(): void {

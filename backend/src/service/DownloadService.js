@@ -10,23 +10,23 @@ const download = (url, audioOnly, username = 'shared') => {
     var downloadStream = YoutubeDlWrapper.download(url, audioOnly)
     let download = DownloadCache.addDownload()
 
-    downloadStream.on('downloading', (data) => {
+    downloadStream.on('progress', (data) => {
         DownloadCache.updateDownload(download.id, data)
     })
 
     downloadStream.on('complete', (data) => {
         DownloadCache.completedAndConvertingDownload(download.id, data)
-    });
+    })
 
     downloadStream.on('finished', () => {
         DownloadCache.finishDownload(download.id)
         // FileStorageService.storeAs(downloadStream, targetFile, audioOnly, username)
-    });
+    })
     
     downloadStream.on('error', (error) => {
         console.error('An error occurred', error)
         DownloadCache.downloadError(download.id)
-    });
+    })
     
 
     return download

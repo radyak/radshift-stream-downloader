@@ -6,18 +6,18 @@
 
     <section *ngFor="let download of downloads">
         <div class="progress-label main">
-            {{ download.metadata.fulltitle }}
+            {{ download.filename }}
         </div>
-        <mat-progress-bar [value]="download.progress.percentage"></mat-progress-bar>
+        <mat-progress-bar [value]="getPercentage(download.percentage)"></mat-progress-bar>
         
         <div class="progress-label" *ngIf="download.status === 'STARTING'">
             Starting ...
         </div>
         <div class="progress-label" *ngIf="download.status === 'IN_PROGRESS'">
-            {{ download.progress.percentage }}%
+            {{ download._percent_str }}%
             <div class="right">
                 <mat-icon>timer</mat-icon>
-                {{ timeString(download.progress.eta) }}
+                {{ download._eta_str }}
             </div>
         </div>
         <div class="progress-label" *ngIf="download.status === 'FINISHED'">

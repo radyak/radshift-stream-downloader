@@ -22,7 +22,7 @@ RUN apk add --no-cache ffmpeg
 RUN apk add --update \
     python \
     py-pip \
-  && pip install virtualenv \
+  && pip install virtualenv youtube_dl \
   && rm -rf /var/cache/apk/*
 
 WORKDIR /usr/src/app
@@ -37,6 +37,5 @@ COPY --from=frontend-build /usr/src/frontend/dist/frontend /usr/src/frontend/dis
 RUN mkdir -p /usr/src/app/output
 
 ENV OUTPUT_PATH /usr/src/app/output
-ENV FFMPEG_PATH /usr/bin/ffmpeg
 
 CMD [ "npm", "start" ]

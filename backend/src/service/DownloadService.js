@@ -7,7 +7,9 @@ const download = (url, audioOnly, username = 'shared') => {
     
     console.log(`Downloading video ${url}`)
 
-    var downloadStream = YoutubeDlWrapper.download(url, audioOnly)
+    // TODO: Fix user-specific output
+    var targetDir = FileStorageService.getStoragePath(audioOnly, username)
+    var downloadStream = YoutubeDlWrapper.download(url, targetDir, audioOnly)
     let download = DownloadCache.addDownload()
 
     downloadStream.on('progress', (data) => {
@@ -20,7 +22,6 @@ const download = (url, audioOnly, username = 'shared') => {
 
     downloadStream.on('finished', () => {
         DownloadCache.finishDownload(download.id)
-        // FileStorageService.storeAs(downloadStream, targetFile, audioOnly, username)
     })
     
     downloadStream.on('error', (error) => {

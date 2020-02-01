@@ -54,10 +54,16 @@ module.exports = {
     */
     updateDownload: (id, data) => {
         let download = CACHE[id]
+
         download = {
             ...download,
             ...data,
-            status: STATUS_IN_PROGRESS
+            status: STATUS_IN_PROGRESS,
+            filename: data.filename.replace(/.*\//g, ''),
+            percentage: parseInt(data._percent_str)
+        }
+        if (!download.title) {
+            download.title = download.filename.replace(/\..*/g, '')
         }
         CACHE[id] = download
 

@@ -40,21 +40,16 @@ module.exports = {
         })
     },
 
-    download: (url, audioOnly = false) => {
+    download: (url, targetDir, audioOnly = false) => {
 
         const eventEmitter = new EventEmitter();
 
-        /* 
-        TODO:   1. options
-                Call with 
-                    --format=...
-                    -x
-                    --audio-format=mp3
-                etc.?
-
-                2. cwd?
-        */
-        const pythonProcess = spawn("python", ["./src/python/download.py", url, (audioOnly ? "True" : "False") ]);
+        const pythonProcess = spawn("python", [
+            "./src/python/download.py",
+            url,
+            targetDir,
+            (audioOnly ? "True" : "False")
+        ]);
 
         pythonProcess.stdout.on("data", (outputBuffer) => {
             let str = outputBuffer.toString()

@@ -37,6 +37,7 @@ export class DownloadsComponent implements OnInit {
       if (download) {
         download.status = event.status;
         download.filename = event.filename;
+        download.title = event.title;
         download.percentage = event.percentage;
         download._percent_str = event._percent_str;
         download._eta_str = event._eta_str;
@@ -59,10 +60,6 @@ export class DownloadsComponent implements OnInit {
       }
     })
 
-  }
-
-  getPercentage(percentageString) {
-    return parseInt(percentageString) / 100
   }
 
   update(): void {

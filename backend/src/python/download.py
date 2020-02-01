@@ -9,35 +9,33 @@ def my_hook(d):
     sys.stdout.flush()
 
 
-class MyLogger(object):
-    def debug(self, msg):
-        pass
-
-    def warning(self, msg):
-        pass
-
-    def error(self, msg):
-        print(msg)
-
-
 url = sys.argv[1]
-audioOnly = sys.argv[2]
+targetDir = sys.argv[2]
+audioOnly = sys.argv[3]
 
 
-audioPostProcessor = {
-    'key': 'FFmpegExtractAudio',
-    'preferredcodec': 'mp3',
-    'preferredquality': '192',
-}
+# For options see:
+# https://github.com/ytdl-org/youtube-dl/blob/3e4cedf9e8cd3157df2457df7274d0c842421945/youtube_dl/YoutubeDL.py#L137-L312
 
-postProcessors = [audioPostProcessor] if audioOnly == 'True' else []
+ydl_opts = {}
 
-ydl_opts = {
-    # 'logger': MyLogger(),
-    'progress_hooks': [my_hook],
-    'format': 'bestaudio/best',
-    'postprocessors': postProcessors,
-}
+if audioOnly == 'True':
+    ydl_opts = {
+        'progress_hooks': [my_hook],
+        'format': 'bestaudio',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+        'outtmpl': targetDir + '/%(title)s.%(ext)s'
+    }
+else:
+    ydl_opts = {
+        'progress_hooks': [my_hook],
+        'format': 'mp4/best',
+        'outtmpl': targetDir + '/%(title)s.%(ext)s'
+    }
 
 
 

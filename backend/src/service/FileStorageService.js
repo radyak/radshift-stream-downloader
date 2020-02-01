@@ -57,6 +57,8 @@ module.exports = {
         }
     },
 
+    getStoragePath: getStoragePath,
+
     getFilePath: getFilePath,
 
     deleteFile: (filename, isAudio, username) => {
@@ -66,43 +68,6 @@ module.exports = {
         }
         fs.unlinkSync(filepath)
         return filepath
-    },
-
-    storeAs: (fileStream, fileName, isAudio, username) => {
-
-        let storagePath = getStoragePath(isAudio, username)
-        if (!fs.existsSync(storagePath)){
-            fs.mkdirSync(storagePath, { recursive: true });
-        }
-
-        var now = new Date().toISOString()
-        var tempFile = path.join(storagePath, `download.${now}.${fileName}`)
-        
-        return new Promise((resolve, reject) => {
-
-            let onFinish = () => {
-                var finalFilePath = path.join(storagePath, fileName)
-                fs.rename(tempFile, finalFilePath, (err) => {
-                    if(err) {
-                        console.error(`Could not rename ${tempFile} to ${fileName}`)
-                        reject(err)
-                        return
-                    }
-                    console.log(`File saved as ${fileName}`)
-                    resolve({
-                        name: fileName,
-                        fullpath: finalFilePath
-                    })
-                })
-                console.log('Processing finished !');
-            },
-
-            onError = (error) => {
-                console.error('An error occurred while persisting video data:', error)
-                reject(error)
-            }
-
-        })
-
     }
+
 }

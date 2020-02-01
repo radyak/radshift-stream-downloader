@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DownloadsService } from 'src/app/services/downloads.service';
 import { InfoService } from 'src/app/services/info.service';
 import { min } from 'rxjs/operators';
+import { FilesService } from 'src/app/services/files.service';
 
 @Component({
   selector: 'app-start',
@@ -18,6 +19,10 @@ export class StartComponent implements OnInit {
   public videoInfo: any;
   public videoInfoLoading: boolean = false;
 
+  private mediaDirectories: any;
+  private selectedMediaDirectory: string = 'Downloads';
+  private customMediaDirectory: string;
+
   private urlPattern: RegExp = new RegExp('^(https?:\\/\\/)?'+ // protocol
       '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
       '((\\d{1,3}\\.){3}\\d{1,3}))'+ // ip (v4) address
@@ -30,7 +35,8 @@ export class StartComponent implements OnInit {
     private route: ActivatedRoute,
     private downloadService: DownloadsService,
     private infoService: InfoService,
-    private router: Router) { }
+    private router: Router,
+    private filesService: FilesService) { }
 
   ngOnInit() {
     this.route.queryParamMap.subscribe(params => {
@@ -39,6 +45,10 @@ export class StartComponent implements OnInit {
         this.setUrl(decodeURIComponent(url));
       }
       this.audioOnly = params.get('type') === 'audio';
+    })
+
+    this.filesService.getMediaDirectories().subscribe(mediaDirectories => {
+      this.mediaDirectories = mediaDirectories;
     })
   }
 
@@ -81,11 +91,20 @@ export class StartComponent implements OnInit {
 
   startDownload(): void {
     this.loading = true;
-    this.downloadService.startDownload(this.url, this.audioOnly)
+    let mediaDirectory = this.selectedMediaDirectory === 'CUSTOM' ? this.customMediaDirectory : this.selectedMediaDirectory;
+    this.downloadService.startDownload(this.url, this.audioOnly, mediaDirectory)
       .subscribe(download => {
         this.router.navigate(['downloads']);
         this.loading = false;
       });
+  }
+
+  getMediaDirectories() {
+    if (!this.mediaDirectories) {
+      return []
+    }
+    let mediaDirectories = this.audioOnly ? this.mediaDirectories.audio : this.mediaDirectories.video;
+    return mediaDirectories.sort();
   }
 
 }

@@ -75,4 +75,21 @@
         </button>
     </section>
 
+    <section>
+        <label>
+            Download to:
+        </label>
+        <mat-radio-group aria-label="Select an option" [(ngModel)]="selectedMediaDirectory">
+            <mat-radio-button *ngFor="let directory of getMediaDirectories()" [value]="directory">
+                {{ directory }}
+            </mat-radio-button>
+            <mat-radio-button value="CUSTOM" [checked]="selectedMediaDirectory === 'CUSTOM'">
+                <input matInput placeholder="Custom"
+                        (focus)="selectedMediaDirectory = 'CUSTOM'"
+                        name="customMediaDirectory"
+                        [(ngModel)]="customMediaDirectory">
+            </mat-radio-button>
+        </mat-radio-group>
+    </section>
+
 </div>

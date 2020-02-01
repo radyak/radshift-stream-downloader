@@ -18,6 +18,11 @@ label {
     }
 }
 
+.mat-radio-button {
+    display: block;
+    padding: 2px 16px;
+}
+
 .mat-button-toggle-checked {
 
     // Not possible to access primary color... -_-

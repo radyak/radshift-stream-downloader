@@ -3,12 +3,12 @@ const FileStorageService = require('./FileStorageService')
 const DownloadCache = require('./DownloadCache')
 
 
-const download = (url, audioOnly, username = 'shared') => {
+const download = (url, audioOnly, username = 'shared', mediaDirectory = 'Downloads') => {
     
     console.log(`Downloading video ${url}`)
 
     // TODO: Fix user-specific output
-    var targetDir = FileStorageService.getStoragePath(audioOnly, username)
+    var targetDir = FileStorageService.getStoragePath(audioOnly, username, mediaDirectory)
     var downloadStream = YoutubeDlWrapper.download(url, targetDir, audioOnly)
     let download = DownloadCache.addDownload()
 

@@ -8,7 +8,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon'; 
-import { MatInputModule } from '@angular/material';
+import { MatInputModule, MatRadioModule } from '@angular/material';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
@@ -54,6 +54,7 @@ import { StreamComponent } from './components/stream/stream.component';
     MatDividerModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
+    MatRadioModule,
     HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],

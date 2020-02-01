@@ -14,6 +14,21 @@ router.get('/video', (req, res) => {
 })
 
 
+router.get('/media-directories', (req, res) => {
+    const username = req.user
+
+    const audioDirectories = FileStorageService.getMediaDirectories(true, req.user)
+    const videoDirectories = FileStorageService.getMediaDirectories(false, req.user)
+
+    const response = {
+        audio: audioDirectories,
+        video: videoDirectories
+    }
+
+    res.status(200).send(response)
+})
+
+
 router.get('/:filename', (req, res) => {
     const filename = req.params.filename
     const filepath = FileStorageService.getFilePath(filename, req.user)

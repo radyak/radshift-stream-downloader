@@ -28,4 +28,8 @@ export class FilesService {
   public deleteFile(filename: string): Observable<File[]> {
     return this.httpClient.delete<File[]>(this.urlService.getUrlForPath(`/api/files/${filename}`));
   }
+
+  public getMediaDirectories(): Observable<any> {
+    return this.httpClient.get<any>(this.urlService.getUrlForPath(`/api/files/media-directories`));
+  }
 }

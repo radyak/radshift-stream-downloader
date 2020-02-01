@@ -19,9 +19,9 @@ export class StartComponent implements OnInit {
   public videoInfo: any;
   public videoInfoLoading: boolean = false;
 
-  private mediaDirectories: any;
-  private selectedMediaDirectory: string = 'Downloads';
-  private customMediaDirectory: string;
+  public mediaDirectories: any;
+  public selectedMediaDirectory: string = 'Downloads';
+  public customMediaDirectory: string;
 
   private urlPattern: RegExp = new RegExp('^(https?:\\/\\/)?'+ // protocol
       '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name

@@ -30,6 +30,7 @@ export class StartComponent implements OnInit {
       '(\\?[;&amp;a-z\\d%_.~+=-]*)?'+ // query string
       '(\\#[-a-z\\d_]*)?$',
   'i');
+  private urlExtractor: RegExp = /\b(https?\:\/\/.+)/gi;
 
   constructor(
     private route: ActivatedRoute,
@@ -53,7 +54,7 @@ export class StartComponent implements OnInit {
   }
 
   setUrl(url: string): void {
-    this.url = url;
+    this.url = url.match(this.urlExtractor)[0];
     if (this.isUrl(url)) {
       this.tryLoadInfo(url);
     }

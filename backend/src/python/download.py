@@ -21,13 +21,20 @@ ydl_opts = {}
 
 if audioOnly == 'True':
     ydl_opts = {
+        'writethumbnail': 'True',
         'progress_hooks': [my_hook],
         'format': 'bestaudio',
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
+        'postprocessors': [
+            {
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': '192',
+            },
+            {
+                # Must be AFTER postprocessor with key 'FFmpegExtractAudio'!
+                'key': 'EmbedThumbnail'
+            }
+        ],
         'outtmpl': targetDir + '/%(title)s.%(ext)s'
     }
 else:

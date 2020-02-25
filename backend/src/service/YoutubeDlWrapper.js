@@ -11,10 +11,16 @@ const eventMap = {
 const toJson = (str) => {
     let lines = str.split("\n")
     let content = lines.find(line => line.startsWith("{"))
-    if (content) {
-        return JSON.parse(content)
+    if (!content) {
+        return null
     }
-    return null
+    
+    try {
+        return JSON.parse(content)
+    } catch(e) {
+        console.log(e)
+        return null
+    }
 }
 
 
@@ -29,6 +35,9 @@ module.exports = {
                 if (event) {
                     resolve(event)
                 }
+            })
+            pythonProcess.on("exit", (code, signal) => {
+                reject()
             })
         })
 

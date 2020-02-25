@@ -29,10 +29,11 @@ router.get('/video', (req, res) => {
     console.log(`Searching info for ${url}`)
     YoutubeDlWrapper.getInfo(url)
         .then(info => {
-            res.status(200).send(info)
+            if (info) {
+                res.status(200).send(info)
+            }
         })
         .catch(e => {
-            console.log(e)
             res.status(400).send(e)
         })
 })

@@ -22,7 +22,7 @@ RUN apk add --no-cache ffmpeg
 RUN apk add --update \
     python \
     py-pip \
-  && pip install virtualenv youtube_dl \
+  && pip install -U virtualenv youtube_dl \
   && rm -rf /var/cache/apk/*
 
 WORKDIR /usr/src/app

@@ -12,13 +12,14 @@ const toJson = (str) => {
     let lines = str.split("\n")
     let content = lines.find(line => line.startsWith("{"))
     if (!content) {
+        console.warn("No JSON found; input:", str)
         return null
     }
     
     try {
         return JSON.parse(content)
     } catch(e) {
-        console.log(e)
+        console.error("Could not parse JSON:", str, e)
         return null
     }
 }

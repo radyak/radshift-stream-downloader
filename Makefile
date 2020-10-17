@@ -32,6 +32,7 @@ run: build
 
 clean:
 	docker rm radshift-stream-downloader || true
+	docker image prune -f
 
 version.patch:
 	cd backend && npm version patch

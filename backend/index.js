@@ -23,6 +23,12 @@ app.use('/api/downloads', authRequired, require('./src/routes/downloads'))
 app.use('/api/files', authRequired, require('./src/routes/files'))
 app.use('/api/streams', authRequired, require('./src/routes/streams'))
 
+app.use('/api/status', (req, res) => {
+  res.status(200).send({
+      version: process.env.npm_package_version
+  })
+})
+
 // Must be public - resource will redirect to a client page which handles token transmission 
 app.use('/api/share', bodyParser.urlencoded({ extended: true }), require('./src/routes/share'))
 

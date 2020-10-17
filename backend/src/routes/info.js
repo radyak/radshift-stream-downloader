@@ -39,10 +39,4 @@ router.get('/video', (req, res) => {
 })
 
 
-router.get('/meta', (req, res) => {
-    res.status(200).send({
-        version: process.env.npm_package_version
-    })
-})
-
 module.exports = router

@@ -44,7 +44,10 @@ else:
         'outtmpl': targetDir + '/%(title)s.%(ext)s'
     }
 
-
+try:
+    ydl_opts.proxy = sys.argv[4]
+except IndexError:
+    print('!!! no proxy defined !!!')
 
 with youtube_dl.YoutubeDL(ydl_opts) as ydl:
     ydl.download([url])

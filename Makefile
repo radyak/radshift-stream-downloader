@@ -12,7 +12,7 @@ default: release
 
 
 build: prepare clean
-	docker build -t $(REPO)/$(IMAGE):$(TAG) --build-arg BASE_IMAGE=$(BASE_IMAGE) .
+	docker build --no-cache -t $(REPO)/$(IMAGE):$(TAG) --build-arg BASE_IMAGE=$(BASE_IMAGE) .
 
 publish: build
 	docker login
@@ -58,4 +58,4 @@ run.dev.frontend:
 ## common
 
 prepare:
-	git pull
+	# git pull

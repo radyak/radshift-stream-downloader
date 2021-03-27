@@ -54,20 +54,12 @@ module.exports = {
 
         const eventEmitter = new EventEmitter();
 
-        var args = [
+        const pythonProcess = spawn("python", [
             "./src/python/download.py",
             url,
             targetDir,
             (audioOnly ? "True" : "False")
-        ]
-
-        if (process.env.PROXY) {
-            args[4] = process.env.PROXY
-        }
-
-        console.log('args: ' + args)
-        
-        const pythonProcess = spawn("python", args);
+        ]);
 
         pythonProcess.stdout.on("data", (outputBuffer) => {
             let str = outputBuffer.toString()

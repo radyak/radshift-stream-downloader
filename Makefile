@@ -28,7 +28,7 @@ release.minor: version.minor publish
 release.major: version.major publish
 
 run: build
-	docker run -p 3009:3009 -e PORT=3009 --name radshift-stream-downloader $(REPO)/$(IMAGE):$(TAG)
+	docker run -p 3009:3009 --rm -e PORT=3009 --name radshift-stream-downloader $(REPO)/$(IMAGE):$(TAG)
 
 clean:
 	docker rm radshift-stream-downloader || true

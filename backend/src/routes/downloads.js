@@ -18,8 +18,9 @@ router.post('', function (req, res) {
 
     const url = req.body.url
     const audioOnly = !!req.body.audioOnly
-    const mediaDirectory = req.body.mediaDirectory ? req.body.mediaDirectory.trim() : ''
-
+    const user = req.user || 'shared'
+    const mediaDirectory = req.body.mediaDirectory ? req.body.mediaDirectory.trim() : 'Downloads'
+    
     if (!url) {
         console.log(`URL is missing`)
         res.status(400).send({
@@ -29,7 +30,7 @@ router.post('', function (req, res) {
         return
     }
 
-    let download = DownloadService.startDownload(url, audioOnly, req.user, mediaDirectory)
+    let download = DownloadService.startDownload(url, audioOnly, user, mediaDirectory)
     res.status(202).send(download)
 
 })

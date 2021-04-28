@@ -54,12 +54,15 @@ module.exports = {
 
         const eventEmitter = new EventEmitter();
 
-        const pythonProcess = spawn("python", [
+        const processArgs = [
             "./src/python/download.py",
-            url,
-            targetDir,
-            (audioOnly ? "True" : "False")
-        ]);
+            "--url", url,
+            "--dir", targetDir,
+            "--audio-only", audioOnly ? "True" : "False"
+        ];
+
+        console.log("Spawning Python process: python " + processArgs.join(" "))
+        const pythonProcess = spawn("python", processArgs);
 
         pythonProcess.stdout.on("data", (outputBuffer) => {
             let str = outputBuffer.toString()

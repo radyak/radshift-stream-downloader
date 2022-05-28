@@ -5,3 +5,4 @@ ffmpeg-*
 !ffmpeg-*.xz
 
 .env
+*.iml
